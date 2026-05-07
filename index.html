@@ -137,6 +137,9 @@
   .day-btn .tick { position:absolute; top:8px; right:10px; font-size:1rem; }
   .day-btn .day-topic { font-size:0.68rem; color:var(--text); margin-top:6px; opacity:.8; }
 
+  /* Butang Pergi Minggu 2 */
+  #btnMinggu2:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
   /* ====== LESSON SCREEN ====== */
   .lesson-header {
     display:flex; align-items:center; justify-content:space-between;
@@ -334,7 +337,6 @@
 
 <div class="app">
 
-  <!-- HOME -->
   <div class="screen active" id="homeScreen">
     <div class="home-title">Belajar <span class="hl">English IT</span><br>Dalam 7 Hari 🚀</div>
     <div class="home-sub">Setiap hari ada 5 perkataan + kuiz. Dengar sebutan, faham makna, jawab soalan!</div>
@@ -342,9 +344,12 @@
     <p style="color:var(--muted);font-size:0.8rem;font-family:'Space Mono',monospace;">
       💡 Klik sebarang hari untuk belajar. Selesaikan untuk buka hari berikutnya.
     </p>
+
+    <button id="btnMinggu2" onclick="window.location.href='minggu2.html'" style="display:none; width:100%; margin-top:20px; padding:16px; background:linear-gradient(135deg, var(--accent2), var(--accent)); color:#fff; border:none; border-radius:12px; font-family:'Syne',sans-serif; font-weight:800; font-size:1.1rem; cursor:pointer; text-align:center; transition: transform 0.2s;">
+      🚀 Seterusnya: Buka Minggu 2!
+    </button>
   </div>
 
-  <!-- LESSON -->
   <div class="screen" id="lessonScreen">
     <div class="lesson-header">
       <button class="back-btn" onclick="goHome()">← Balik</button>
@@ -355,7 +360,6 @@
       <button class="mode-tab" id="tabQuiz" onclick="setMode('quiz')">🎯 Kuiz</button>
     </div>
 
-    <!-- Learn mode -->
     <div id="learnMode">
       <div class="vocab-card" id="vocabCard"></div>
       <div class="nav-btns">
@@ -364,13 +368,11 @@
       </div>
     </div>
 
-    <!-- Quiz mode -->
     <div id="quizMode" style="display:none;">
       <div class="quiz-card" id="quizCard"></div>
     </div>
   </div>
 
-  <!-- RESULT -->
   <div class="screen" id="resultScreen">
     <div class="result-wrap" id="resultWrap"></div>
   </div>
@@ -580,6 +582,14 @@ function buildHome() {
     if (!locked) btn.onclick = () => openDay(i);
     grid.appendChild(btn);
   });
+
+  // Tunjukkan butang "Pergi ke Minggu 2" jika Hari 7 (index ke-6) telah selesai
+  const btnM2 = document.getElementById('btnMinggu2');
+  if (state.completedDays.includes(6)) {
+    btnM2.style.display = 'block';
+  } else {
+    btnM2.style.display = 'none';
+  }
 }
 
 // ========================
@@ -767,6 +777,13 @@ function showResult() {
     : pct >= 60 ? 'Lulus! Ulang kaji lagi untuk lebih baik.'
     : 'Jangan putus asa! Cuba lagi selepas ulang kaji.';
 
+  // Logik butang untuk Hari Terakhir (Ke Minggu 2)
+  let nextActionBtn = `<button class="rbtn primary" onclick="goHome()">🏠 Kembali ke Utama</button>`;
+  
+  if (dayIdx === 6 && pct >= 60) {
+    nextActionBtn = `<button class="rbtn primary" onclick="window.location.href='minggu2.html'" style="background:var(--accent2); color:#fff;">🚀 Pergi ke Minggu 2</button>`;
+  }
+
   document.getElementById('resultWrap').innerHTML = `
     <div class="result-emoji">${emoji}</div>
     <div class="result-title">${pct >= 60 ? 'Hari Selesai!' : 'Cuba Lagi!'}</div>
@@ -774,7 +791,7 @@ function showResult() {
     <div class="result-msg">${msg}</div>
     <div class="result-btns">
       <button class="rbtn secondary" onclick="openDay(${dayIdx})">🔁 Cuba Lagi</button>
-      <button class="rbtn primary" onclick="goHome()">🏠 Kembali ke Utama</button>
+      ${nextActionBtn}
     </div>
   `;
   showScreen('resultScreen');
