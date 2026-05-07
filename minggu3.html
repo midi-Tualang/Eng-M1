@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT English – Minggu 3 (Pro)</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-dark: #090a0f;
+    --panel: #111424;
+    --border: #2a2d45;
+    --neon-blue: #00f2fe;
+    --neon-pink: #ff007f;
+    --success: #00e676;
+    --danger: #ff1744;
+    --text-main: #e2e8f0;
+    --text-muted: #828ba3;
+    --card: #15192b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg-dark); color: var(--text-main);
+    font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden;
+  }
+
+  /* Cyber Grid Background */
+  body::before {
+    content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image: 
+      linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    transform: perspective(500px) rotateX(60deg) translateY(-100px) scale(3);
+    opacity: 0.5;
+  }
+
+  header {
+    position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 30px; border-bottom: 1px solid var(--border);
+    background: rgba(9, 10, 15, 0.9); backdrop-filter: blur(12px);
+  }
+  .logo { font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--text-main); letter-spacing: 2px;}
+  .logo span { color: var(--neon-pink); text-shadow: 0 0 10px rgba(255,0,127,0.5); }
+  .badge { background: var(--neon-blue); color: #000; font-family: 'Rajdhani', sans-serif; font-weight: 700; padding: 4px 12px; border-radius: 4px; font-size: 0.9rem; letter-spacing: 1px;}
+  .xp-box { display: flex; align-items: center; gap: 12px; }
+  .xp-text { font-family: 'Rajdhani', sans-serif; font-weight: 700; color: var(--neon-blue); letter-spacing: 1px;}
+  .xp-bar { width: 140px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .xp-fill { height: 100%; background: var(--neon-pink); box-shadow: 0 0 10px var(--neon-pink); transition: width 0.5s ease; }
+
+  .container { position: relative; z-index: 5; max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+  .screen { display: none; animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  .screen.active { display: block; }
+  @keyframes slideIn { from { opacity: 0; transform: scale(0.98) translateY(10px); } to { opacity: 1; transform: none; } }
+
+  /* HOME */
+  .title-glitch { font-family: 'Rajdhani', sans-serif; font-size: 3.5rem; font-weight: 700; line-height: 1; margin-bottom: 10px; color: #fff;}
+  .title-glitch span { color: var(--neon-blue); text-shadow: 0 0 15px rgba(0, 242, 254, 0.4); }
+  .subtitle { color: var(--text-muted); font-size: 1rem; margin-bottom: 40px; max-width: 500px; line-height: 1.5; }
+  
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 16px; margin-bottom: 30px; }
+  .day-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 20px 15px; text-align: center; cursor: pointer; transition: 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .day-card::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 2px; background: var(--neon-blue); transition: 0.3s; }
+  .day-card:hover:not(.locked) { border-color: var(--neon-blue); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0, 242, 254, 0.1); }
+  .day-card:hover:not(.locked)::after { left: 0; }
+  .day-card.locked { opacity: 0.4; cursor: not-allowed; }
+  .day-card.done { border-color: var(--neon-pink); }
+  .day-card.done::after { background: var(--neon-pink); left: 0; }
+  .d-num { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .d-topic { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* NAV & TABS */
+  .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+  .btn-back { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 8px 16px; border-radius: 4px; font-family: 'Rajdhani', sans-serif; font-weight: 600; cursor: pointer; letter-spacing: 1px; transition: 0.2s; }
+  .btn-back:hover { color: var(--neon-blue); border-color: var(--neon-blue); }
+  .tabs { display: flex; gap: 10px; background: var(--card); padding: 6px; border-radius: 6px; border: 1px solid var(--border); }
+  .tab { padding: 8px 24px; border-radius: 4px; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; background: transparent; color: var(--text-muted); transition: 0.2s; letter-spacing: 1px;}
+  .tab.active { background: var(--neon-blue); color: #000; }
+
+  /* LEARN MODE */
+  .flashcard { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 40px; text-align: center; position: relative; margin-bottom: 20px; }
+  .f-cat { font-family: 'Rajdhani', sans-serif; color: var(--neon-pink); font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+  .f-word { font-size: 3.5rem; font-weight: 800; color: #fff; margin-bottom: 10px; line-height: 1.1; letter-spacing: -1px; }
+  .f-phon { font-family: monospace; color: var(--text-muted); margin-bottom: 25px; }
+  .f-ms { font-size: 1.2rem; font-weight: 600; color: var(--neon-blue); margin-bottom: 20px; }
+  .f-ex { font-size: 0.95rem; color: var(--text-main); font-style: italic; background: rgba(0, 242, 254, 0.05); padding: 15px; border-left: 3px solid var(--neon-blue); text-align: left; margin-bottom: 8px; border-radius: 0 6px 6px 0; }
+  .f-exms { font-size: 0.85rem; color: var(--text-muted); text-align: left; padding-left: 18px; }
+  .btn-speak { margin-top: 25px; background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink); padding: 10px 24px; border-radius: 4px; font-family: 'Inter', sans-serif; font-weight: 600; cursor: pointer; transition: 0.2s; }
+  .btn-speak:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 15px rgba(255,0,127,0.4); }
+
+  .controls { display: flex; justify-content: center; gap: 15px; }
+  .btn-nav { padding: 12px 30px; border-radius: 4px; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 1px; cursor: pointer; border: none; transition: 0.2s; }
+  .btn-prev { background: var(--panel); border: 1px solid var(--border); color: var(--text-muted); }
+  .btn-prev:hover { border-color: #fff; color: #fff; }
+  .btn-next { background: #fff; color: #000; }
+  .btn-next:hover { box-shadow: 0 0 15px rgba(255,255,255,0.4); }
+
+  /* QUIZ & TYPING */
+  .q-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 30px; margin-bottom: 20px; }
+  .q-title { font-family: 'Rajdhani', sans-serif; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; font-size: 0.9rem; }
+  .q-word { font-size: 2.5rem; font-weight: 800; color: #fff; margin-bottom: 20px; }
+  .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .btn-opt { padding: 16px; background: var(--panel); border: 1px solid var(--border); color: var(--text-main); font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; border-radius: 6px; text-align: left; transition: 0.2s; }
+  .btn-opt:hover:not(:disabled) { border-color: var(--neon-blue); background: rgba(0, 242, 254, 0.05); }
+  .btn-opt.correct { background: rgba(0, 230, 118, 0.1); border-color: var(--success); color: var(--success); }
+  .btn-opt.wrong { background: rgba(255, 23, 68, 0.1); border-color: var(--danger); color: var(--danger); }
+  .btn-opt:disabled { cursor: not-allowed; }
+
+  /* TYPING INPUT */
+  .type-hint { font-size: 1.2rem; font-weight: 600; color: var(--neon-pink); margin-bottom: 10px; }
+  .type-subhint { font-family: monospace; color: var(--text-muted); margin-bottom: 25px; }
+  .type-input { width: 100%; background: var(--panel); border: 2px solid var(--border); color: #fff; font-family: monospace; font-size: 2rem; padding: 15px; border-radius: 8px; text-align: center; outline: none; margin-bottom: 15px; transition: 0.3s; text-transform: uppercase;}
+  .type-input:focus { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); }
+  .type-input.correct { border-color: var(--success); color: var(--success); }
+  .type-input.wrong { border-color: var(--danger); color: var(--danger); animation: shake 0.3s; }
+  .btn-check { width: 100%; padding: 15px; background: var(--neon-blue); color: #000; border: none; border-radius: 6px; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1.2rem; letter-spacing: 1px; cursor: pointer; transition: 0.2s; }
+  .btn-check:hover { box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); }
+
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+
+  .feedback { margin-top: 15px; padding: 15px; border-radius: 6px; font-weight: 600; display: none; text-align: center; }
+  .feedback.show { display: block; }
+  .feedback.ok { background: rgba(0, 230, 118, 0.1); color: var(--success); border: 1px solid var(--success); }
+  .feedback.bad { background: rgba(255, 23, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); }
+  .btn-block { width: 100%; margin-top: 15px; padding: 15px; background: #fff; color: #000; border: none; border-radius: 6px; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1.1rem; cursor: pointer; display: none; text-transform: uppercase; letter-spacing: 1px;}
+  .btn-block.show { display: block; }
+
+  /* RESULT */
+  .result-ctn { text-align: center; padding: 60px 20px; }
+  .r-score { font-family: 'Rajdhani', sans-serif; font-size: 5rem; font-weight: 700; color: var(--neon-blue); line-height: 1; margin-bottom: 10px; text-shadow: 0 0 30px rgba(0, 242, 254, 0.3); }
+  .r-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 15px; }
+  .r-msg { color: var(--text-muted); margin-bottom: 30px; }
+  .r-actions { display: flex; justify-content: center; gap: 15px; }
+
+  @media(max-width: 600px) { .opt-grid { grid-template-columns: 1fr; } .top-bar { flex-direction: column; gap: 15px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">IT<span>ENG</span> <span class="badge">PRO</span></div>
+  <div class="xp-box">
+    <div class="xp-text">XP <span id="xpNum">0</span></div>
+    <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+  </div>
+</header>
+
+<div class="container">
+  <!-- HOME -->
+  <div class="screen active" id="sHome">
+    <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 20px;">
+      <a href="minggu2.html" style="color:var(--text-muted); text-decoration:none; font-family:monospace; font-size:0.8rem; border: 1px solid var(--border); padding: 4px 8px; border-radius: 4px; transition: 0.2s;" onmouseover="this.style.color='var(--neon-pink)'; this.style.borderColor='var(--neon-pink)';" onmouseout="this.style.color='var(--text-muted)'; this.style.borderColor='var(--border)';">cd ../minggu2</a>
+    </div>
+    <div class="title-glitch">Tahap <span>Profesional</span></div>
+    <div class="subtitle">Mod Ejaan diaktifkan. Penguasaan teknikal dan automasi. Selesaikan setiap peringkat untuk rekod markah.</div>
+    <div class="grid" id="gridDays"></div>
+  </div>
+
+  <!-- LESSON -->
+  <div class="screen" id="sLesson">
+    <div class="top-bar">
+      <button class="btn-back" onclick="goHome()">◄ KEMBALI KONSOL</button>
+      <div class="tabs">
+        <button class="tab active" id="tLearn" onclick="setMode('learn')">BELAJAR</button>
+        <button class="tab" id="tQuiz" onclick="setMode('quiz')">KUIZ</button>
+        <button class="tab" id="tType" onclick="setMode('type')">EJAAN</button>
+      </div>
+    </div>
+
+    <!-- LEARN -->
+    <div id="mLearn">
+      <div class="flashcard" id="cardLearn"></div>
+      <div class="controls">
+        <button class="btn-nav btn-prev" onclick="navL(-1)">SEBELUM</button>
+        <button class="btn-nav btn-next" onclick="navL(1)">SETERUSNYA</button>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="mQuiz" style="display:none;">
+      <div class="q-box" id="cardQuiz"></div>
+    </div>
+
+    <!-- TYPE -->
+    <div id="mType" style="display:none;">
+      <div class="q-box" id="cardType"></div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="sResult">
+    <div class="result-ctn" id="cardResult"></div>
+  </div>
+</div>
+
+<script>
+// DATA MINGGU 3
+const data = [
+  {
+    day:1, topic:"Pembangunan Rangkaian",
+    words:[
+      {word:"Protocol", ms:"Protokol", phon:"/ˈprəʊtəkɒl/", cat:"Rangkaian",
+       ex:"Set the communication protocol correctly.", exMs:"Tetapkan protokol komunikasi dengan betul."},
+      {word:"Bandwidth", ms:"Jalur Lebar", phon:"/ˈbændwɪdθ/", cat:"Rangkaian",
+       ex:"Monitor the network bandwidth usage.", exMs:"Pantau penggunaan jalur lebar rangkaian."},
+      {word:"Latency", ms:"Kependaman", phon:"/ˈleɪtənsi/", cat:"Rangkaian",
+       ex:"High latency causes game server lag.", exMs:"Kependaman tinggi menyebabkan pelayan permainan sangkut."},
+      {word:"Firewall", ms:"Tembok Api", phon:"/ˈfaɪərwɔːl/", cat:"Keselamatan",
+       ex:"Configure the firewall to allow port 2302.", exMs:"Konfigurasi tembok api untuk membenarkan port 2302."},
+      {word:"Redundancy", ms:"Sandaran/Lebihan", phon:"/rɪˈdʌndənsi/", cat:"Infrastruktur",
+       ex:"Implement redundancy for system backup.", exMs:"Laksanakan sandaran untuk sokongan sistem."}
+    ]
+  },
+  {
+    day:2, topic:"Perkakasan Lanjutan",
+    words:[
+      {word:"Overclock", ms:"Tingkatkan Kelajuan", phon:"/ˌoʊvərˈklɒk/", cat:"Perkakasan",
+       ex:"Overclock the processor for better gaming performance.", exMs:"Tingkatkan kelajuan pemproses untuk prestasi permainan yang lebih baik."},
+      {word:"Thermal Paste", ms:"Pes Haba", phon:"/ˈθɜːrməl peɪst/", cat:"Perkakasan",
+       ex:"Apply thermal paste before mounting the cooler.", exMs:"Sapukan pes haba sebelum memasang penyejuk."},
+      {word:"Bottleneck", ms:"Kesesakan Prestasi", phon:"/ˈbɒtlnɛk/", cat:"Perkakasan",
+       ex:"A slow hard drive can bottleneck the system.", exMs:"Cakera keras yang perlahan boleh menyebabkan kesesakan prestasi sistem."},
+      {word:"Motherboard", ms:"Papan Induk", phon:"/ˈmʌðərbɔːrd/", cat:"Perkakasan",
+       ex:"Connect the power supply to the motherboard.", exMs:"Sambungkan bekalan kuasa ke papan induk."},
+      {word:"BIOS", ms:"Sistem Input/Output Asas", phon:"/ˈbaɪoʊs/", cat:"Sistem",
+       ex:"Update the BIOS for hardware compatibility.", exMs:"Kemaskini BIOS untuk keserasian perkakasan."}
+    ]
+  },
+  {
+    day:3, topic:"Skrip & Pelayan",
+    words:[
+      {word:"Script", ms:"Skrip", phon:"/skrɪpt/", cat:"Pembangunan",
+       ex:"Run the script to start the mission.", exMs:"Jalankan skrip untuk memulakan misi."},
+      {word:"Execute", ms:"Laksana / Jalankan", phon:"/ˈɛksɪkjuːt/", cat:"Perintah",
+       ex:"Execute the server admin command.", exMs:"Laksanakan arahan pentadbir pelayan."},
+      {word:"Directory", ms:"Direktori", phon:"/dɪˈrɛktəri/", cat:"Storan",
+       ex:"Create a new directory for the files.", exMs:"Cipta direktori baharu untuk fail-fail tersebut."},
+      {word:"Path", ms:"Laluan", phon:"/pæθ/", cat:"Storan",
+       ex:"Set the storage path to the local drive.", exMs:"Tetapkan laluan storan ke pemacu tempatan."},
+      {word:"Local Storage", ms:"Storan Tempatan", phon:"/ˈloʊkəl ˈstɔːrɪdʒ/", cat:"Storan",
+       ex:"Save recordings to local storage instead of the cloud.", exMs:"Simpan rakaman di storan tempatan dan bukannya di awan."}
+    ]
+  },
+  {
+    day:4, topic:"Data & Automasi",
+    words:[
+      {word:"Formula", ms:"Formula", phon:"/ˈfɔːrmjʊlə/", cat:"Helaian Kerja",
+       ex:"The formula calculates the net balance automatically.", exMs:"Formula mengira baki bersih secara automatik."},
+      {word:"Automate", ms:"Automatikkan", phon:"/ˈɔːtəmeɪt/", cat:"Proses",
+       ex:"Automate the inventory update process.", exMs:"Automatikkan proses kemaskini inventori."},
+      {word:"Dashboard", ms:"Papan Pemuka", phon:"/ˈdæʃbɔːrd/", cat:"Antaramuka",
+       ex:"View the student records on the dashboard.", exMs:"Lihat rekod pelajar pada papan pemuka."},
+      {word:"Application", ms:"Aplikasi", phon:"/ˌæplɪˈkeɪʃən/", cat:"Pembangunan",
+       ex:"Build a custom application for the school.", exMs:"Bina aplikasi khusus untuk sekolah."},
+      {word:"Variable", ms:"Pemboleh Ubah", phon:"/ˈvɛəriəbəl/", cat:"Pembangunan",
+       ex:"Assign a variable to store the subject name.", exMs:"Tentukan pemboleh ubah untuk menyimpan nama subjek."}
+    ]
+  },
+  {
+    day:5, topic:"Keselamatan Siber",
+    words:[
+      {word:"Vulnerability", ms:"Kelemahan", phon:"/ˌvʌlnərəˈbɪlɪti/", cat:"Siber",
+       ex:"Scan the server for any security vulnerability.", exMs:"Imbas pelayan untuk mengesan sebarang kelemahan keselamatan."},
+      {word:"Exploit", ms:"Eksploitasi", phon:"/ˈɛksplɔɪt/", cat:"Siber",
+       ex:"Hackers exploit outdated software.", exMs:"Penggodam mengeksploitasi perisian lapuk."},
+      {word:"Ransomware", ms:"Perisian Tebusan", phon:"/ˈrænsəmwɛər/", cat:"Ancaman",
+       ex:"Ransomware encrypts all your critical files.", exMs:"Perisian tebusan menyulitkan semua fail kritikal anda."},
+      {word:"Phishing", ms:"Pancingan Data", phon:"/ˈfɪʃɪŋ/", cat:"Ancaman",
+       ex:"Do not click links in phishing emails.", exMs:"Jangan klik pautan dalam e-mel pancingan data."},
+      {word:"Penetration", ms:"Penembusan", phon:"/ˌpɛnɪˈtreɪʃən/", cat:"Ujian",
+       ex:"Conduct a penetration test to secure the network.", exMs:"Jalankan ujian penembusan untuk mengamankan rangkaian."}
+    ]
+  },
+  {
+    day:6, topic:"Pembangunan Permainan",
+    words:[
+      {word:"Render", ms:"Papar / Render", phon:"/ˈrɛndər/", cat:"Grafik",
+       ex:"The GPU takes time to render the graphics.", exMs:"GPU mengambil masa untuk memaparkan grafik."},
+      {word:"Texture", ms:"Tekstur", phon:"/ˈtɛkstʃər/", cat:"Grafik",
+       ex:"Load the high-resolution map texture.", exMs:"Muat tekstur peta beresolusi tinggi."},
+      {word:"Polygon", ms:"Poligon", phon:"/ˈpɒlɪɡɒn/", cat:"Grafik",
+       ex:"3D models are built using polygons.", exMs:"Model 3D dibina menggunakan poligon."},
+      {word:"Frame Rate", ms:"Kadar Bingkai", phon:"/freɪm reɪt/", cat:"Prestasi",
+       ex:"A high frame rate ensures smooth gameplay.", exMs:"Kadar bingkai yang tinggi memastikan permainan lancar."},
+      {word:"Engine", ms:"Enjin (Permainan)", phon:"/ˈɛndʒɪn/", cat:"Pembangunan",
+       ex:"The game runs on a custom engine.", exMs:"Permainan ini dijalankan pada enjin khusus."}
+    ]
+  },
+  {
+    day:7, topic:"Komunikasi Teknikal",
+    words:[
+      {word:"Clear the cache", ms:"Kosongkan cache", phon:"/klɪər ðə kæʃ/", cat:"Penyelesaian",
+       ex:"Clear the cache if the app does not load.", exMs:"Kosongkan cache jika aplikasi tidak dimuatkan."},
+      {word:"Apply the patch", ms:"Gunakan tampalan/kemaskini", phon:"/əˈplaɪ ðə pætʃ/", cat:"Penyelenggaraan",
+       ex:"Apply the patch to fix the server bug.", exMs:"Gunakan tampalan untuk membetulkan pepijat pelayan."},
+      {word:"Reproduce the error", ms:"Hasilkan semula ralat", phon:"/ˌriːprəˈdjuːs ðə ˈɛrər/", cat:"Penyelesaian",
+       ex:"Can you reproduce the error for the report?", exMs:"Bolehkah anda hasilkan semula ralat untuk laporan?"},
+      {word:"The server is lagging", ms:"Pelayan lambat/sangkut", phon:"/ðə ˈsɜːrvər ɪz ˈlæɡɪŋ/", cat:"Masalah",
+       ex:"Players are complaining that the server is lagging.", exMs:"Pemain mengadu bahawa pelayan lambat."},
+      {word:"Escalate to admin", ms:"Bawa kepada pentadbir", phon:"/ˈɛskəleɪt tʊ ˈædmɪn/", cat:"Tindakan",
+       ex:"Escalate the access issue to the admin.", exMs:"Bawa isu akses kepada pentadbir."}
+    ]
+  }
+];
+
+let S = {
+  done: JSON.parse(localStorage.getItem('iteng3_done')||'[]'),
+  xp: parseInt(localStorage.getItem('iteng3_xp')||'0'),
+  day: null, idx: 0, mode: 'learn',
+  q:{ list:[], i:0, score:0, act:false },
+  t:{ list:[], i:0, score:0, act:false }
+};
+
+function save() { localStorage.setItem('iteng3_done', JSON.stringify(S.done)); localStorage.setItem('iteng3_xp', S.xp); }
+function addXP(n) { S.xp = Math.min(S.xp+n, 9999); save(); document.getElementById('xpNum').textContent = S.xp; document.getElementById('xpFill').style.width = Math.min((S.xp/1500)*100, 100) + '%'; }
+addXP(0);
+
+function buildGrid() {
+  const g = document.getElementById('gridDays'); g.innerHTML = '';
+  data.forEach((d, i) => {
+    const done = S.done.includes(i), locked = i > 0 && !S.done.includes(i-1);
+    const el = document.createElement('div');
+    el.className = 'day-card' + (done ? ' done' : '') + (locked ? ' locked' : '');
+    el.innerHTML = `<div class="d-num">0${d.day}</div><div class="d-topic">${d.topic}</div>`;
+    if(!locked) el.onclick = () => openD(i);
+    g.appendChild(el);
+  });
+}
+
+function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function goHome() { show('sHome'); buildGrid(); }
+
+function openD(i) {
+  S.day = i; S.idx = 0;
+  setMode('learn'); show('sLesson'); renderL();
+}
+
+function setMode(m) {
+  S.mode = m;
+  ['tLearn','tQuiz','tType'].forEach(id => document.getElementById(id).classList.remove('active'));
+  let tid = m==='learn' ? 'tLearn' : m==='quiz' ? 'tQuiz' : 'tType';
+  document.getElementById(tid).classList.add('active');
+  
+  document.getElementById('mLearn').style.display = m==='learn'?'block':'none';
+  document.getElementById('mQuiz').style.display = m==='quiz'?'block':'none';
+  document.getElementById('mType').style.display = m==='type'?'block':'none';
+  
+  if(m==='quiz') startQ();
+  if(m==='type') startT();
+}
+
+// SPEAK
+function speak(t) {
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang='en-GB'; u.rate=0.85;
+  window.speechSynthesis.speak(u);
+}
+
+// LEARN
+function renderL() {
+  const w = data[S.day].words[S.idx];
+  document.getElementById('cardLearn').innerHTML = `
+    <div class="f-cat">${w.cat}</div>
+    <div class="f-word">${w.word}</div>
+    <div class="f-phon">${w.phon}</div>
+    <div class="f-ms">🇲🇾 ${w.ms}</div>
+    <div class="f-ex">"${w.ex}"</div>
+    <div class="f-exms">${w.exMs}</div>
+    <button class="btn-speak" onclick="speak('${w.word.replace(/'/g,"\\'")}')">🔊 DENGAR SEBUTAN</button>
+  `;
+}
+function navL(dir) {
+  const len = data[S.day].words.length;
+  if(S.idx + dir >= 0 && S.idx + dir < len) { S.idx += dir; renderL(); }
+  else if(dir > 0) { if(confirm('Selesai Mod Belajar. Buka Mod Kuiz?')) setMode('quiz'); }
+}
+
+// QUIZ
+function startQ() {
+  S.q = { list: [...data[S.day].words].sort(()=>Math.random()-.5), i:0, score:0, act:false };
+  renderQ();
+}
+function renderQ() {
+  const {list, i} = S.q; if(i >= list.length) { setMode('type'); return; }
+  const w = list[i], all = data[S.day].words;
+  const wrongs = all.filter(x => x.word !== w.word).sort(()=>Math.random()-.5).slice(0,3);
+  const opts = [...wrongs, w].sort(()=>Math.random()-.5);
+  S.q.act = false;
+  
+  document.getElementById('cardQuiz').innerHTML = `
+    <div class="q-title">KUIZ: SOALAN ${i+1}/${list.length}</div>
+    <div class="q-word">${w.word}</div>
+    <div class="opt-grid">
+      ${opts.map(o => `<button class="btn-opt" onclick="ansQ('${o.word.replace(/'/g,"\\'")}','${w.word.replace(/'/g,"\\' खोला")}',this)">${o.ms}</button>`).join('')}
+    </div>
+    <div id="fbQ" class="feedback"></div>
+    <button id="nxtQ" class="btn-block" onclick="renderQ()">SETERUSNYA</button>
+  `;
+}
+function ansQ(sel, cor, btn) {
+  if(S.q.act) return; S.q.act = true;
+  document.querySelectorAll('.btn-opt').forEach(b => b.disabled = true);
+  const fb = document.getElementById('fbQ');
+  if(sel === cor) {
+    btn.classList.add('correct'); S.q.score++; fb.className='feedback show ok'; fb.textContent='TEPAT! +10 XP'; addXP(10);
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.btn-opt').forEach(b => {
+      const ms = data[S.day].words.find(x=>x.word===cor).ms;
+      if(b.textContent === ms) b.classList.add('correct');
+    });
+    fb.className='feedback show bad'; fb.textContent='RALAT. PERIKSA JAWAPAN.';
+  }
+  document.getElementById('nxtQ').classList.add('show');
+  S.q.i++;
+}
+
+// TYPING
+function startT() {
+  S.t = { list: [...data[S.day].words].sort(()=>Math.random()-.5), i:0, score:0, act:false };
+  renderT();
+}
+function renderT() {
+  const {list, i} = S.t; if(i >= list.length) { endDay(); return; }
+  const w = list[i]; S.t.act = false;
+  
+  document.getElementById('cardType').innerHTML = `
+    <div class="q-title">EJAAN: PERKATAAN ${i+1}/${list.length}</div>
+    <div class="type-hint">🇲🇾 ${w.ms}</div>
+    <div class="type-subhint">${w.phon}</div>
+    <input type="text" id="inpType" class="type-input" autocomplete="off" placeholder="TAIP EJAAN INGGERIS" onkeypress="if(event.key==='Enter')chkType('${w.word.replace(/'/g,"\\'")}')">
+    <button class="btn-check" onclick="chkType('${w.word.replace(/'/g,"\\'")}')">SEMAK</button>
+    <div id="fbT" class="feedback"></div>
+    <button id="nxtT" class="btn-block" onclick="renderT()">SETERUSNYA</button>
+  `;
+  setTimeout(()=>document.getElementById('inpType').focus(), 100);
+}
+function chkType(cor) {
+  if(S.t.act) return; 
+  const inp = document.getElementById('inpType'); const val = inp.value.trim().toLowerCase();
+  if(!val) return; S.t.act = true; inp.disabled = true;
+  const fb = document.getElementById('fbT');
+  if(val === cor.toLowerCase()) {
+    inp.classList.add('correct'); S.t.score++; fb.className='feedback show ok'; fb.textContent='EJAAN TEPAT! +15 XP'; addXP(15); speak(cor);
+  } else {
+    inp.classList.add('wrong'); inp.value = cor.toUpperCase();
+    fb.className='feedback show bad'; fb.textContent='EJAAN SALAH.';
+  }
+  document.getElementById('nxtT').classList.add('show');
+  S.t.i++;
+}
+
+// END
+function endDay() {
+  const tQ = S.q.list.length, tT = S.t.list.length;
+  const scQ = S.q.score, scT = S.t.score;
+  const pct = Math.round(((scQ + scT) / (tQ + tT)) * 100);
+  
+  if(pct >= 60 && !S.done.includes(S.day)) { S.done.push(S.day); addXP(100); save(); }
+  
+  document.getElementById('cardResult').innerHTML = `
+    <div class="r-score">${pct}%</div>
+    <div class="r-title">${pct>=60?'TAHAP SELESAI':'GAGAL MISI'}</div>
+    <div class="r-msg">Kuiz: ${scQ}/${tQ} | Ejaan: ${scT}/${tT}</div>
+    <div class="r-actions">
+      <button class="btn-nav btn-prev" onclick="openD(${S.day})">MULA SEMULA</button>
+      <button class="btn-nav btn-next" onclick="goHome()">KONSOL UTAMA</button>
+    </div>
+  `;
+  show('sResult');
+}
+
+buildGrid();
+</script>
+</body>
+</html>
