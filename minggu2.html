@@ -701,12 +701,30 @@ function showResult(from){
   const total=qs?qs.length:5;
   const pct=Math.round(score/total*100);
   const di=S.day;
-  if(pct>=60&&!S.done.includes(di)){S.done.push(di);addXP(50);save();}
+  
+  // Kemaskini XP jika lulus
+  if(pct>=60&&!S.done.includes(di)){
+    S.done.push(di);
+    addXP(50);
+    save();
+  }
+  
+  // Tentukan emoji dan mesej
   const emoji=pct===100?'🏆':pct>=80?'🌟':pct>=60?'😊':'💪';
   const msg=pct===100?'Sempurna! Anda kuasai semua perkataan hari ini!':
     pct>=80?'Hampir sempurna! Teruskan semangat ini!':
     pct>=60?'Lulus! Ulang kaji lagi untuk kuasai sepenuhnya.':
     'Jangan putus asa! Baca semula & cuba lagi.';
+
+  // Logik butang untuk Hari Terakhir (Ke Minggu 3)
+  let nextBtnHTML = `<button class="rbtn rp" onclick="goHome()">🏠 Menu Utama</button>`;
+  
+  // Jika ini adalah Hari 7 (index 6) dan skor lulus (>= 60%), tukar butang
+  if (di === 6 && pct >= 60) {
+    nextBtnHTML = `<button class="rbtn rp" onclick="window.location.href='minggu3.html'" style="background:var(--accent3); color:#000;">🔥 Pergi ke Minggu 3</button>`;
+  }
+
+  // Paparkan keputusan di skrin
   document.getElementById('resultBox').innerHTML=`
     <div class="r-emoji">${emoji}</div>
     <div class="r-title">${pct>=60?'Hari Selesai!':'Cuba Lagi!'}</div>
@@ -714,12 +732,20 @@ function showResult(from){
     <div class="r-msg">${msg}</div>
     <div class="r-btns">
       <button class="rbtn rs" onclick="openDay(${di})">🔁 Cuba Lagi</button>
-      <button class="rbtn rp" onclick="goHome()">🏠 Menu Utama</button>
+      ${nextBtnHTML}
     </div>`;
+    
   showScreen('resultScreen');
 }
 
 // INIT
+  // Tunjukkan butang "Pergi ke Minggu 3" jika Hari 7 (index ke-6) telah selesai
+  const btnM3 = document.getElementById('btnMinggu3');
+  if (S.done.includes(6)) {
+    btnM3.style.display = 'block';
+  } else {
+    btnM3.style.display = 'none';
+  }
 buildHome();
 </script>
 </body>
