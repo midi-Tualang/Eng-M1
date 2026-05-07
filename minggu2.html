@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT English – Minggu 2</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0f0a;
+    --panel: #131810;
+    --border: #243020;
+    --accent: #7fff4f;
+    --accent2: #f59e0b;
+    --accent3: #38bdf8;
+    --danger: #f87171;
+    --text: #d4edba;
+    --muted: #5a7a4a;
+    --card: #161d12;
+    --glow: #7fff4f33;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Outfit',sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  /* scan line effect */
+  body::after{
+    content:'';
+    position:fixed;inset:0;z-index:9999;pointer-events:none;
+    background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);
+  }
+  /* grid bg */
+  body::before{
+    content:'';
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size:48px 48px;
+    opacity:0.4;
+  }
+  .noise{
+    position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.03;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* HEADER */
+  header{
+    position:relative;z-index:10;
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    padding:16px 24px;
+    border-bottom:1px solid var(--border);
+    background:rgba(12,15,10,0.95);
+  }
+  .logo{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:1rem;color:var(--accent);letter-spacing:3px;
+    text-shadow:0 0 12px var(--accent);
+  }
+  .logo em{color:var(--accent2);font-style:normal;}
+  .week-chip{
+    background:var(--accent2);color:#000;
+    font-size:0.72rem;font-weight:800;
+    padding:4px 14px;border-radius:4px;letter-spacing:2px;
+  }
+  .xp-row{display:flex;align-items:center;gap:10px;}
+  .xp-lbl{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent2);}
+  .xp-track{width:110px;height:7px;background:var(--border);border-radius:2px;overflow:hidden;}
+  .xp-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;transition:width .6s ease;}
+
+  /* APP */
+  .app{position:relative;z-index:5;max-width:960px;margin:0 auto;padding:24px 16px 70px;}
+
+  /* SCREENS */
+  .screen{display:none;animation:fadeUp .3s ease;}
+  .screen.active{display:block;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  /* ===== HOME ===== */
+  .terminal-header{
+    border:1px solid var(--accent);
+    border-radius:8px 8px 0 0;
+    padding:10px 18px;
+    background:var(--panel);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.8rem;color:var(--muted);
+    display:flex;gap:10px;align-items:center;
+    margin-bottom:0;
+  }
+  .dot{width:10px;height:10px;border-radius:50%;}
+  .d1{background:#f87171;} .d2{background:var(--accent2);} .d3{background:var(--accent);}
+  .terminal-body{
+    border:1px solid var(--accent);border-top:none;border-radius:0 0 8px 8px;
+    background:var(--panel);padding:24px;margin-bottom:28px;
+  }
+  .term-line{font-family:'IBM Plex Mono',monospace;font-size:0.85rem;color:var(--muted);margin-bottom:6px;}
+  .term-line .cmd{color:var(--accent);}
+  .term-line .out{color:var(--text);}
+  .term-line .amber{color:var(--accent2);}
+  .big-title{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;line-height:1.1;margin:18px 0 8px;}
+  .big-title .hl{color:var(--accent);text-shadow:0 0 20px var(--accent)66;}
+  .sub-text{color:var(--muted);font-size:.95rem;margin-bottom:28px;max-width:480px;line-height:1.6;}
+
+  .day-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:12px;margin-bottom:24px;}
+  .day-card{
+    background:var(--card);border:1px solid var(--border);border-radius:10px;
+    padding:16px 10px;text-align:center;cursor:pointer;
+    transition:all .22s ease;position:relative;overflow:hidden;
+  }
+  .day-card::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(135deg,var(--accent)08,transparent);
+    opacity:0;transition:opacity .22s;
+  }
+  .day-card:hover:not(.locked){border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 28px var(--glow);}
+  .day-card:hover:not(.locked)::before{opacity:1;}
+  .day-card.locked{opacity:.35;cursor:not-allowed;}
+  .day-card.done{border-color:var(--accent3);}
+  .day-num{font-family:'IBM Plex Mono',monospace;font-size:1.4rem;font-weight:700;color:var(--accent);}
+  .day-card.done .day-num{color:var(--accent3);}
+  .day-topic{font-size:.67rem;color:var(--text);margin-top:5px;line-height:1.3;}
+  .day-wc{font-size:.65rem;color:var(--muted);margin-top:4px;}
+  .day-icon{position:absolute;top:7px;right:9px;font-size:.9rem;}
+
+  /* ===== LESSON ===== */
+  .lesson-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:10px;}
+  .back-btn{
+    background:none;border:1px solid var(--border);color:var(--muted);
+    padding:8px 18px;border-radius:6px;cursor:pointer;
+    font-family:'Outfit',sans-serif;font-size:.85rem;transition:all .2s;
+  }
+  .back-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .prog-dots{display:flex;gap:5px;}
+  .p-dot{width:26px;height:5px;border-radius:2px;background:var(--border);transition:background .3s;}
+  .p-dot.done{background:var(--accent3);}
+  .p-dot.cur{background:var(--accent);}
+
+  .mode-tabs{display:flex;gap:8px;margin-bottom:22px;}
+  .m-tab{
+    padding:8px 22px;border-radius:6px;font-weight:700;font-size:.85rem;
+    cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--muted);
+    transition:all .2s;font-family:'Outfit',sans-serif;
+  }
+  .m-tab.active{background:var(--accent2);border-color:var(--accent2);color:#000;}
+
+  /* vocab card */
+  .vcard{
+    background:var(--card);border:1px solid var(--border);border-radius:14px;
+    padding:32px 28px;margin-bottom:18px;position:relative;overflow:hidden;
+  }
+  .vcard::after{
+    content:'';position:absolute;bottom:-30px;left:-30px;
+    width:140px;height:140px;border-radius:50%;
+    background:radial-gradient(circle,var(--accent)18 0%,transparent 70%);
+    pointer-events:none;
+  }
+  .v-tag{
+    display:inline-block;background:var(--accent)18;color:var(--accent);
+    border:1px solid var(--accent)44;font-size:.68rem;
+    font-family:'IBM Plex Mono',monospace;padding:3px 12px;border-radius:4px;
+    margin-bottom:14px;letter-spacing:1px;text-transform:uppercase;
+  }
+  .v-word{font-size:clamp(2rem,6vw,3.2rem);font-weight:900;color:var(--accent);
+    line-height:1.1;margin-bottom:6px;text-shadow:0 0 18px var(--accent)44;}
+  .v-phonetic{font-family:'IBM Plex Mono',monospace;color:var(--muted);font-size:.88rem;margin-bottom:14px;}
+  .v-ms{font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:10px;}
+  .v-ex{
+    font-size:.9rem;color:var(--muted);font-style:italic;
+    border-left:3px solid var(--accent2);padding-left:14px;
+  }
+  .v-exms{font-size:.82rem;color:var(--muted)99;padding-left:14px;margin-top:4px;}
+
+  .speak-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    background:transparent;border:1.5px solid var(--accent);color:var(--accent);
+    padding:11px 26px;border-radius:8px;font-family:'Outfit',sans-serif;
+    font-size:.95rem;font-weight:700;cursor:pointer;margin-top:18px;
+    transition:all .2s;
+  }
+  .speak-btn:hover{background:var(--accent);color:#000;box-shadow:0 0 20px var(--glow);}
+  .speak-btn.speaking{animation:glowpulse .5s infinite alternate;}
+  @keyframes glowpulse{from{box-shadow:0 0 4px var(--accent)55}to{box-shadow:0 0 22px var(--accent)}}
+
+  .nav-row{display:flex;gap:12px;justify-content:center;margin-top:18px;}
+  .n-btn{
+    padding:12px 30px;border-radius:8px;font-family:'Outfit',sans-serif;
+    font-weight:700;font-size:.95rem;cursor:pointer;border:none;transition:all .2s;
+  }
+  .n-prev{background:var(--card);border:1px solid var(--border);color:var(--muted);}
+  .n-prev:hover{border-color:var(--accent);color:var(--accent);}
+  .n-next{background:var(--accent);color:#000;}
+  .n-next:hover{background:#a3ff70;box-shadow:0 4px 20px var(--glow);}
+
+  /* ===== QUIZ ===== */
+  .qcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:18px;}
+  .q-label{font-size:.78rem;color:var(--muted);font-family:'IBM Plex Mono',monospace;
+    text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+  .q-word{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:900;color:var(--accent);margin-bottom:6px;}
+  .q-phon{font-family:'IBM Plex Mono',monospace;color:var(--muted);font-size:.82rem;margin-bottom:16px;}
+  .q-speak{
+    background:var(--card);border:1px solid var(--accent2);color:var(--accent2);
+    padding:7px 18px;border-radius:6px;font-family:'Outfit',sans-serif;
+    cursor:pointer;font-size:.82rem;margin-bottom:22px;transition:all .2s;
+  }
+  .q-speak:hover{background:var(--accent2)22;}
+
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .opt{
+    padding:14px;border-radius:10px;background:var(--panel);
+    border:1px solid var(--border);color:var(--text);
+    font-family:'Outfit',sans-serif;font-size:.88rem;cursor:pointer;
+    text-align:left;transition:all .2s;line-height:1.4;
+  }
+  .opt:hover:not(:disabled){border-color:var(--accent);background:var(--accent)0d;}
+  .opt.correct{background:var(--accent3)22;border-color:var(--accent3);color:var(--accent3);}
+  .opt.wrong{background:var(--danger)22;border-color:var(--danger);color:var(--danger);}
+  .opt:disabled{cursor:not-allowed;}
+
+  .fb{margin-top:14px;padding:11px 15px;border-radius:8px;font-size:.88rem;display:none;}
+  .fb.show{display:block;}
+  .fb.ok{background:var(--accent3)20;border:1px solid var(--accent3)55;color:var(--accent3);}
+  .fb.bad{background:var(--danger)20;border:1px solid var(--danger)55;color:var(--danger);}
+
+  .q-next{
+    width:100%;margin-top:12px;padding:13px;background:var(--accent);color:#000;
+    border:none;border-radius:8px;font-family:'Outfit',sans-serif;
+    font-weight:700;font-size:.95rem;cursor:pointer;display:none;transition:all .2s;
+  }
+  .q-next.show{display:block;}
+  .q-next:hover{background:#a3ff70;}
+
+  /* ===== BONUS: MATCH GAME ===== */
+  .match-intro{color:var(--muted);font-size:.88rem;margin-bottom:18px;font-family:'IBM Plex Mono',monospace;}
+  .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+  .match-col{display:flex;flex-direction:column;gap:8px;}
+  .match-item{
+    padding:12px 16px;border-radius:8px;border:1px solid var(--border);
+    background:var(--panel);color:var(--text);font-size:.88rem;cursor:pointer;
+    transition:all .22s;text-align:center;font-weight:600;
+  }
+  .match-item:hover{border-color:var(--accent2);}
+  .match-item.selected{border-color:var(--accent2);background:var(--accent2)22;color:var(--accent2);}
+  .match-item.matched{border-color:var(--accent3);background:var(--accent3)22;color:var(--accent3);cursor:default;}
+  .match-item.wrong-flash{border-color:var(--danger);background:var(--danger)22;animation:shake .3s ease;}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .match-score-row{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .match-score{font-family:'IBM Plex Mono',monospace;font-size:.85rem;color:var(--accent2);}
+
+  /* ===== RESULT ===== */
+  .result-box{text-align:center;padding:50px 20px;}
+  .r-emoji{font-size:5rem;margin-bottom:14px;}
+  .r-title{font-size:2rem;font-weight:900;margin-bottom:8px;}
+  .r-score{font-size:3.5rem;font-weight:900;color:var(--accent);
+    font-family:'IBM Plex Mono',monospace;margin-bottom:18px;
+    text-shadow:0 0 20px var(--accent)55;}
+  .r-msg{color:var(--muted);max-width:380px;margin:0 auto 30px;line-height:1.65;}
+  .r-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+  .rbtn{
+    padding:13px 26px;border-radius:8px;font-family:'Outfit',sans-serif;
+    font-weight:700;cursor:pointer;border:none;font-size:.95rem;transition:all .2s;
+  }
+  .rp{background:var(--accent);color:#000;}
+  .rp:hover{background:#a3ff70;}
+  .rs{background:var(--card);border:1px solid var(--border);color:var(--text);}
+  .rs:hover{border-color:var(--accent);}
+
+  @media(max-width:500px){
+    .opts,.match-grid{grid-template-columns:1fr;}
+    .day-grid{grid-template-columns:repeat(3,1fr);}
+  }
+</style>
+</head>
+<body>
+<div class="noise"></div>
+
+<header>
+  <div class="logo">IT.<em>ENG</em></div>
+  <div class="week-chip">MINGGU 2</div>
+  <div class="xp-row">
+    <div class="xp-lbl">XP <span id="xpNum">0</span></div>
+    <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+  </div>
+</header>
+
+<div class="app">
+
+  <div class="screen active" id="homeScreen">
+    <div class="terminal-header">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div class="dot d1"></div><div class="dot d2"></div><div class="dot d3"></div>
+        <span style="margin-left:6px;">it-english ~ minggu-2</span>
+      </div>
+      <a href="index.html" style="color:var(--muted); text-decoration:none; margin-left:auto; font-size:0.75rem; border: 1px solid var(--border); padding: 2px 6px; border-radius: 4px; transition: 0.2s;" onmouseover="this.style.color='var(--accent)';" onmouseout="this.style.color='var(--muted)';">cd ../minggu1</a>
+    </div>
+    <div class="terminal-body">
+      <div class="term-line"><span class="cmd">$ </span><span class="out">minggu_sebelumnya</span> <span class="amber">✓ SELESAI</span></div>
+      <div class="term-line"><span class="cmd">$ </span><span class="out">loading minggu_2...</span></div>
+      <div class="term-line"><span class="cmd">$ </span><span class="out">35 perkataan baru siap dipelajari 🟢</span></div>
+    </div>
+    <div class="big-title">Minggu 2 —<br><span class="hl">Naik Tahap!</span> 💡</div>
+    <div class="sub-text">Perkataan lebih kompleks, topik lebih luas. Belajar → Kuiz → Padanan. Setiap hari ada 3 mod!</div>
+    <div class="day-grid" id="dayGrid"></div>
+    <p style="color:var(--muted);font-size:.75rem;font-family:'IBM Plex Mono',monospace;">
+      💡 Selesaikan hari sebelumnya untuk buka hari berikutnya. Skor ≥ 60% untuk lulus.
+    </p>
+  </div>
+
+  <div class="screen" id="lessonScreen">
+    <div class="lesson-top">
+      <button class="back-btn" onclick="goHome()">← Balik</button>
+      <div class="prog-dots" id="progDots"></div>
+    </div>
+    <div class="mode-tabs">
+      <button class="m-tab active" id="tabL" onclick="setMode('learn')">📖 Belajar</button>
+      <button class="m-tab" id="tabQ" onclick="setMode('quiz')">🎯 Kuiz</button>
+      <button class="m-tab" id="tabM" onclick="setMode('match')">🔗 Padanan</button>
+    </div>
+
+    <div id="learnMode">
+      <div class="vcard" id="vcardEl"></div>
+      <div class="nav-row">
+        <button class="n-btn n-prev" onclick="prevW()">← Sebelum</button>
+        <button class="n-btn n-next" onclick="nextW()">Seterusnya →</button>
+      </div>
+    </div>
+
+    <div id="quizMode" style="display:none;">
+      <div class="qcard" id="qcardEl"></div>
+    </div>
+
+    <div id="matchMode" style="display:none;">
+      <div id="matchEl"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="resultScreen">
+    <div class="result-box" id="resultBox"></div>
+  </div>
+
+</div>
+
+<script>
+// ============================
+// CURRICULUM – WEEK 2
+// ============================
+const curriculum = [
+  {
+    day:1, topic:"Pembangunan Web",
+    words:[
+      {word:"Frontend",phonetic:"/ˈfrʌntɛnd/",ms:"Bahagian Hadapan (web)",category:"Web Dev",
+       example:"The frontend is what users see on screen.",exampleMs:"Frontend adalah apa yang pengguna lihat di skrin.",speech:"Frontend"},
+      {word:"Backend",phonetic:"/ˈbækɛnd/",ms:"Bahagian Belakang (server)",category:"Web Dev",
+       example:"The backend handles data and logic.",exampleMs:"Backend mengendalikan data dan logik.",speech:"Backend"},
+      {word:"API",phonetic:"/ˌeɪ piː ˈaɪ/",ms:"Antara Muka Pengaturcaraan Aplikasi",category:"Web Dev",
+       example:"The app uses an API to get weather data.",exampleMs:"Aplikasi menggunakan API untuk mendapat data cuaca.",speech:"A P I"},
+      {word:"Repository",phonetic:"/rɪˈpɒzɪtəri/",ms:"Repositori / Tempat Simpan Kod",category:"Web Dev",
+       example:"Push your code to the repository.",exampleMs:"Tolak kod anda ke repositori.",speech:"Repository"},
+      {word:"Framework",phonetic:"/ˈfreɪmwɜːk/",ms:"Kerangka Kerja",category:"Web Dev",
+       example:"React is a popular JavaScript framework.",exampleMs:"React adalah kerangka kerja JavaScript yang popular.",speech:"Framework"},
+    ]
+  },
+  {
+    day:2, topic:"Pangkalan Data Lanjutan",
+    words:[
+      {word:"Query",phonetic:"/ˈkwɪəri/",ms:"Pertanyaan / Arahan Carian Data",category:"Database",
+       example:"Write a query to find all active users.",exampleMs:"Tulis pertanyaan untuk cari semua pengguna aktif.",speech:"Query"},
+      {word:"Schema",phonetic:"/ˈskiːmə/",ms:"Skema / Struktur Pangkalan Data",category:"Database",
+       example:"The database schema defines table structure.",exampleMs:"Skema pangkalan data menentukan struktur jadual.",speech:"Schema"},
+      {word:"Primary Key",phonetic:"/ˈpraɪməri kiː/",ms:"Kunci Utama (ID unik rekod)",category:"Database",
+       example:"Each record must have a unique primary key.",exampleMs:"Setiap rekod mesti ada kunci utama yang unik.",speech:"Primary Key"},
+      {word:"Migration",phonetic:"/maɪˈɡreɪʃən/",ms:"Penghijrahan (Kemaskini Struktur DB)",category:"Database",
+       example:"Run the migration to add a new column.",exampleMs:"Jalankan penghijrahan untuk tambah lajur baru.",speech:"Migration"},
+      {word:"Index",phonetic:"/ˈɪndɛks/",ms:"Indeks (untuk carian pantas)",category:"Database",
+       example:"Add an index to speed up search queries.",exampleMs:"Tambah indeks untuk mempercepatkan pertanyaan carian.",speech:"Index"},
+    ]
+  },
+  {
+    day:3, topic:"DevOps & Deployment",
+    words:[
+      {word:"Deploy",phonetic:"/dɪˈplɔɪ/",ms:"Lancarkan / Sebarkan Aplikasi",category:"DevOps",
+       example:"We will deploy the app to production tonight.",exampleMs:"Kami akan melancarkan aplikasi ke produksi malam ini.",speech:"Deploy"},
+      {word:"Pipeline",phonetic:"/ˈpaɪplaɪn/",ms:"Saluran Paip (proses automatik)",category:"DevOps",
+       example:"The CI/CD pipeline runs tests automatically.",exampleMs:"Pipeline CI/CD menjalankan ujian secara automatik.",speech:"Pipeline"},
+      {word:"Container",phonetic:"/kənˈteɪnər/",ms:"Bekas (persekitaran terpencil)",category:"DevOps",
+       example:"Docker uses containers to run applications.",exampleMs:"Docker menggunakan bekas untuk menjalankan aplikasi.",speech:"Container"},
+      {word:"Environment",phonetic:"/ɪnˈvaɪrənmənt/",ms:"Persekitaran (dev/staging/production)",category:"DevOps",
+       example:"Test in a staging environment first.",exampleMs:"Uji dalam persekitaran staging dahulu.",speech:"Environment"},
+      {word:"Rollback",phonetic:"/ˈroʊlbæk/",ms:"Undur / Kembali ke Versi Lama",category:"DevOps",
+       example:"If the update fails, rollback to the previous version.",exampleMs:"Jika kemaskini gagal, undur ke versi sebelumnya.",speech:"Rollback"},
+    ]
+  },
+  {
+    day:4, topic:"Rangkaian Lanjutan",
+    words:[
+      {word:"IP Address",phonetic:"/ˌaɪ ˈpiː ˈædrɛs/",ms:"Alamat IP (nombor ID peranti)",category:"Network",
+       example:"Every device has a unique IP address.",exampleMs:"Setiap peranti ada alamat IP yang unik.",speech:"IP Address"},
+      {word:"DNS",phonetic:"/ˌdiː ɛn ˈɛs/",ms:"Sistem Nama Domain",category:"Network",
+       example:"DNS translates domain names to IP addresses.",exampleMs:"DNS menterjemah nama domain kepada alamat IP.",speech:"D N S"},
+      {word:"Protocol",phonetic:"/ˈprəʊtəkɒl/",ms:"Protokol (peraturan komunikasi)",category:"Network",
+       example:"HTTP is a protocol for web communication.",exampleMs:"HTTP adalah protokol untuk komunikasi web.",speech:"Protocol"},
+      {word:"Latency",phonetic:"/ˈleɪtənsi/",ms:"Kependaman / Kelewatan Isyarat",category:"Network",
+       example:"High latency causes slow response times.",exampleMs:"Kependaman tinggi menyebabkan masa tindak balas yang lambat.",speech:"Latency"},
+      {word:"VPN",phonetic:"/ˌviː piː ˈɛn/",ms:"Rangkaian Persendirian Maya",category:"Network",
+       example:"Use a VPN to browse securely.",exampleMs:"Gunakan VPN untuk melayari internet dengan selamat.",speech:"V P N"},
+    ]
+  },
+  {
+    day:5, topic:"Ujian & Kualiti",
+    words:[
+      {word:"Testing",phonetic:"/ˈtɛstɪŋ/",ms:"Pengujian",category:"QA",
+       example:"Testing ensures the software works correctly.",exampleMs:"Pengujian memastikan perisian berfungsi dengan betul.",speech:"Testing"},
+      {word:"Bug Report",phonetic:"/bʌɡ rɪˈpɔːt/",ms:"Laporan Pepijat",category:"QA",
+       example:"Submit a bug report with screenshots.",exampleMs:"Hantar laporan pepijat dengan tangkap layar.",speech:"Bug Report"},
+      {word:"Regression",phonetic:"/rɪˈɡrɛʃən/",ms:"Regresi (pepijat kembali semula)",category:"QA",
+       example:"A regression means a bug has returned.",exampleMs:"Regresi bermaksud pepijat telah kembali semula.",speech:"Regression"},
+      {word:"Unit Test",phonetic:"/ˈjuːnɪt tɛst/",ms:"Ujian Unit (ujian satu fungsi)",category:"QA",
+       example:"Write a unit test for each function.",exampleMs:"Tulis ujian unit untuk setiap fungsi.",speech:"Unit Test"},
+      {word:"Code Review",phonetic:"/koʊd rɪˈvjuː/",ms:"Semakan Kod",category:"QA",
+       example:"All code must pass a code review.",exampleMs:"Semua kod mesti lulus semakan kod.",speech:"Code Review"},
+    ]
+  },
+  {
+    day:6, topic:"Pengurusan Projek IT",
+    words:[
+      {word:"Agile",phonetic:"/ˈædʒaɪl/",ms:"Agile (kaedah pembangunan lincah)",category:"Projek",
+       example:"The team uses Agile to deliver faster.",exampleMs:"Pasukan menggunakan Agile untuk hantar lebih cepat.",speech:"Agile"},
+      {word:"Sprint",phonetic:"/sprɪnt/",ms:"Sprint (tempoh kerja singkat)",category:"Projek",
+       example:"Each sprint lasts two weeks.",exampleMs:"Setiap sprint berlangsung selama dua minggu.",speech:"Sprint"},
+      {word:"Deadline",phonetic:"/ˈdɛdlaɪn/",ms:"Tarikh Akhir / Tempoh Tamat",category:"Projek",
+       example:"The deadline for this feature is Friday.",exampleMs:"Tarikh akhir untuk ciri ini adalah hari Jumaat.",speech:"Deadline"},
+      {word:"Stakeholder",phonetic:"/ˈsteɪkhəʊldər/",ms:"Pihak Berkepentingan",category:"Projek",
+       example:"Present the report to all stakeholders.",exampleMs:"Bentangkan laporan kepada semua pihak berkepentingan.",speech:"Stakeholder"},
+      {word:"Milestone",phonetic:"/ˈmaɪlstəʊn/",ms:"Pencapaian Penting / Mercu Tanda",category:"Projek",
+       example:"Launching the beta is a key milestone.",exampleMs:"Melancarkan beta adalah pencapaian penting.",speech:"Milestone"},
+    ]
+  },
+  {
+    day:7, topic:"Ayat IT Profesional",
+    words:[
+      {word:"Can you share your screen?",phonetic:"/kæn juː ʃɛər jɔːr skriːn/",ms:"Boleh anda kongsi skrin anda?",category:"Ayat",
+       example:"Asked during online meetings.",exampleMs:"Ditanya semasa mesyuarat dalam talian.",speech:"Can you share your screen?"},
+      {word:"I will look into it.",phonetic:"/aɪ wɪl lʊk ˈɪntʊ ɪt/",ms:"Saya akan siasat/selidiki perkara itu.",category:"Ayat",
+       example:"Said when you receive a task or complaint.",exampleMs:"Dikatakan apabila anda menerima tugas atau aduan.",speech:"I will look into it."},
+      {word:"The build is broken.",phonetic:"/ðə bɪld ɪz ˈbroʊkən/",ms:"Proses binaan/sistem tidak berjalan.",category:"Ayat",
+       example:"Said when compilation or CI fails.",exampleMs:"Dikatakan apabila kompilasi atau CI gagal.",speech:"The build is broken."},
+      {word:"We need to refactor this.",phonetic:"/wiː niːd tʊ ˈriːfæktər ðɪs/",ms:"Kita perlu susun semula kod ini.",category:"Ayat",
+       example:"Said when code needs to be cleaned up.",exampleMs:"Dikatakan apabila kod perlu dikemas kini.",speech:"We need to refactor this."},
+      {word:"Let me push the fix.",phonetic:"/lɛt miː pʊʃ ðə fɪks/",ms:"Biar saya hantar pembetulan ini.",category:"Ayat",
+       example:"Said before uploading a code fix.",exampleMs:"Dikatakan sebelum memuat naik pembetulan kod.",speech:"Let me push the fix."},
+    ]
+  }
+];
+
+// ============================
+// STATE
+// ============================
+let S = {
+  done: JSON.parse(localStorage.getItem('iteng2_done')||'[]'),
+  xp: parseInt(localStorage.getItem('iteng2_xp')||'0'),
+  day: null, wIdx:0, mode:'learn',
+  quiz:{qs:[],idx:0,score:0,answered:false},
+  match:{pairs:[],selEng:null,selMs:null,matched:0,score:0}
+};
+function save(){
+  localStorage.setItem('iteng2_done',JSON.stringify(S.done));
+  localStorage.setItem('iteng2_xp',S.xp);
+}
+function addXP(n){S.xp=Math.min(S.xp+n,700);save();document.getElementById('xpNum').textContent=S.xp;document.getElementById('xpFill').style.width=(S.xp/700*100)+'%';}
+addXP(0);
+
+// ============================
+// HOME
+// ============================
+function buildHome(){
+  const g=document.getElementById('dayGrid');g.innerHTML='';
+  curriculum.forEach((d,i)=>{
+    const done=S.done.includes(i);
+    const locked=i>0&&!S.done.includes(i-1);
+    const el=document.createElement('div');
+    el.className='day-card'+(done?' done':'')+(locked?' locked':'');
+    el.innerHTML=`
+      <div class="day-num">Hari ${d.day}</div>
+      <div class="day-topic">${d.topic}</div>
+      <div class="day-wc">${d.words.length} perkataan</div>
+      <div class="day-icon">${done?'✅':locked?'🔒':''}</div>`;
+    if(!locked)el.onclick=()=>openDay(i);
+    g.appendChild(el);
+  });
+}
+
+// ============================
+// NAV
+// ============================
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function goHome(){showScreen('homeScreen');buildHome();}
+
+function openDay(i){
+  S.day=i;S.wIdx=0;S.mode='learn';
+  ['tabL','tabQ','tabM'].forEach(id=>{document.getElementById(id).className='m-tab'+(id==='tabL'?' active':'');});
+  document.getElementById('learnMode').style.display='';
+  document.getElementById('quizMode').style.display='none';
+  document.getElementById('matchMode').style.display='none';
+  showScreen('lessonScreen');renderDots();renderVocab();
+}
+
+// ============================
+// LEARN
+// ============================
+function setMode(m){
+  S.mode=m;
+  document.getElementById('tabL').className='m-tab'+(m==='learn'?' active':'');
+  document.getElementById('tabQ').className='m-tab'+(m==='quiz'?' active':'');
+  document.getElementById('tabM').className='m-tab'+(m==='match'?' active':'');
+  document.getElementById('learnMode').style.display=m==='learn'?'':'none';
+  document.getElementById('quizMode').style.display=m==='quiz'?'':'none';
+  document.getElementById('matchMode').style.display=m==='match'?'':'none';
+  if(m==='quiz')startQuiz();
+  if(m==='match')startMatch();
+}
+
+function renderDots(){
+  const ws=curriculum[S.day].words;
+  const wrap=document.getElementById('progDots');wrap.innerHTML='';
+  ws.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='p-dot'+(i<S.wIdx?' done':i===S.wIdx?' cur':'');
+    wrap.appendChild(d);
+  });
+}
+
+function escQ(s){return s.replace(/'/g,"&#39;");}
+
+function renderVocab(){
+  const w=curriculum[S.day].words[S.wIdx];
+  document.getElementById('vcardEl').innerHTML=`
+    <div class="v-tag">${w.category}</div>
+    <div class="v-word">${w.word}</div>
+    <div class="v-phonetic">${w.phonetic}</div>
+    <div class="v-ms">🇲🇾 ${w.ms}</div>
+    <div class="v-ex">"${w.example}"</div>
+    <div class="v-exms">${w.exampleMs}</div>
+    <button class="speak-btn" id="spkMain" onclick="speak('${escQ(w.speech)}','spkMain')">🔊 Dengar Sebutan</button>`;
+  renderDots();
+}
+function prevW(){if(S.wIdx>0){S.wIdx--;renderVocab();}}
+function nextW(){
+  const ws=curriculum[S.day].words;
+  if(S.wIdx<ws.length-1){S.wIdx++;renderVocab();}
+  else{if(confirm('Hebat! Semua perkataan dah dipelajari. 🎉\nNak cuba Kuiz sekarang?'))setMode('quiz');}
+}
+
+// ============================
+// SPEECH
+// ============================
+function speak(text,btnId){
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-GB';u.rate=0.82;u.pitch=1.0;
+  const vs=window.speechSynthesis.getVoices();
+  const v=vs.find(x=>x.lang.startsWith('en')&&x.name.includes('Female'))||vs.find(x=>x.lang.startsWith('en'))||vs[0];
+  if(v)u.voice=v;
+  const btn=document.getElementById(btnId);
+  if(btn){btn.classList.add('speaking');u.onend=()=>btn.classList.remove('speaking');}
+  window.speechSynthesis.speak(u);
+}
+window.speechSynthesis.onvoiceschanged=()=>{};
+
+// ============================
+// QUIZ
+// ============================
+function startQuiz(){
+  const ws=curriculum[S.day].words;
+  S.quiz={qs:[...ws].sort(()=>Math.random()-.5),idx:0,score:0,answered:false};
+  renderQuiz();
+}
+function renderQuiz(){
+  const {qs,idx}=S.quiz;
+  if(idx>=qs.length){showResult('quiz');return;}
+  const q=qs[idx];
+  const all=curriculum[S.day].words;
+  const wrongs=all.filter(w=>w.word!==q.word).sort(()=>Math.random()-.5).slice(0,3);
+  const opts=[...wrongs,q].sort(()=>Math.random()-.5);
+  S.quiz.answered=false;
+  document.getElementById('qcardEl').innerHTML=`
+    <div class="q-label">Soalan ${idx+1} / ${qs.length} — Pilih makna yang betul</div>
+    <div class="q-word">${q.word}</div>
+    <div class="q-phon">${q.phonetic}</div>
+    <button class="q-speak" id="qspk" onclick="speak('${escQ(q.speech)}','qspk')">🔊 Dengar</button>
+    <div class="opts" id="optsEl">
+      ${opts.map(o=>`<button class="opt" onclick="answerQ('${escQ(o.word)}','${escQ(q.word)}',this)">${o.ms}</button>`).join('')}
+    </div>
+    <div class="fb" id="fbEl"></div>
+    <button class="q-next" id="qnxt" onclick="quizNext()">${idx+1<qs.length?'Soalan Seterusnya →':'Lihat Keputusan 🏆'}</button>`;
+}
+function answerQ(chosen,correct,btn){
+  if(S.quiz.answered)return;S.quiz.answered=true;
+  document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+  const fb=document.getElementById('fbEl');
+  if(chosen===correct){
+    btn.classList.add('correct');S.quiz.score++;
+    fb.className='fb show ok';fb.textContent='✅ Betul! +10 XP';addXP(10);
+  }else{
+    btn.classList.add('wrong');
+    const ms=curriculum[S.day].words.find(w=>w.word===correct)?.ms;
+    document.querySelectorAll('.opt').forEach(b=>{if(b.textContent.trim()===ms)b.classList.add('correct');});
+    fb.className='fb show bad';fb.textContent='❌ Tidak tepat. Teruskan belajar!';
+  }
+  document.getElementById('qnxt').classList.add('show');
+}
+function quizNext(){S.quiz.idx++;renderQuiz();}
+
+// ============================
+// MATCH GAME
+// ============================
+function startMatch(){
+  const ws=curriculum[S.day].words;
+  const pairs=ws.map(w=>({eng:w.word,ms:w.ms,speech:w.speech})).sort(()=>Math.random()-.5);
+  const msShuffled=[...pairs].sort(()=>Math.random()-.5);
+  S.match={pairs,msShuffled,selEng:null,selMs:null,matched:0,score:0,total:pairs.length};
+  renderMatch();
+}
+function renderMatch(){
+  const {pairs,msShuffled,matched,total}=S.match;
+  document.getElementById('matchEl').innerHTML=`
+    <div class="match-score-row">
+      <div class="match-intro">🔗 Padankan perkataan Inggeris dengan makna Melayu</div>
+      <div class="match-score">${matched}/${total} padanan</div>
+    </div>
+    <div class="match-grid">
+      <div class="match-col" id="engCol">
+        ${pairs.map((p,i)=>`<div class="match-item" id="eng_${i}" onclick="selectMatch('eng',${i},'${escQ(p.eng)}','${escQ(p.speech)}')">${p.eng}</div>`).join('')}
+      </div>
+      <div class="match-col" id="msCol">
+        ${msShuffled.map((p,i)=>`<div class="match-item" id="ms_${i}" onclick="selectMatch('ms',${i},'${escQ(p.ms)}','')">${p.ms}</div>`).join('')}
+      </div>
+    </div>
+    <button class="n-btn n-next" style="margin-top:10px;" onclick="setMode('quiz')">Pergi ke Kuiz →</button>`;
+}
+function selectMatch(side,idx,val,speech){
+  const el=document.getElementById(side+'_'+idx);
+  if(el.classList.contains('matched'))return;
+
+  // Speak when selecting English side
+  if(side==='eng'&&speech)speak(speech,null);
+
+  if(side==='eng'){
+    // deselect previous eng
+    if(S.match.selEng!==null){
+      const prev=document.getElementById('eng_'+S.match.selEng.idx);
+      if(prev&&!prev.classList.contains('matched'))prev.classList.remove('selected');
+    }
+    S.match.selEng={idx,val};
+    el.classList.add('selected');
+  }else{
+    if(S.match.selMs!==null){
+      const prev=document.getElementById('ms_'+S.match.selMs.idx);
+      if(prev&&!prev.classList.contains('matched'))prev.classList.remove('selected');
+    }
+    S.match.selMs={idx,val};
+    el.classList.add('selected');
+  }
+
+  // Check pair
+  if(S.match.selEng&&S.match.selMs){
+    const engWord=S.match.selEng.val;
+    const msWord=S.match.selMs.val;
+    const correct=S.match.pairs.find(p=>p.eng===engWord&&p.ms===msWord);
+    if(correct){
+      document.getElementById('eng_'+S.match.selEng.idx).classList.replace('selected','matched');
+      document.getElementById('ms_'+S.match.selMs.idx).classList.replace('selected','matched');
+      S.match.matched++;addXP(8);
+      S.match.selEng=null;S.match.selMs=null;
+      // Update score display
+      const sc=document.querySelector('.match-score');if(sc)sc.textContent=S.match.matched+'/'+S.match.total;
+      if(S.match.matched===S.match.total){
+        setTimeout(()=>{alert('🏆 Semua padanan betul! Hebat!');},200);
+      }
+    }else{
+      // Flash wrong
+      const eEl=document.getElementById('eng_'+S.match.selEng.idx);
+      const mEl=document.getElementById('ms_'+S.match.selMs.idx);
+      [eEl,mEl].forEach(el=>{if(el){el.classList.add('wrong-flash');setTimeout(()=>el.classList.remove('wrong-flash','selected'),400);}});
+      S.match.selEng=null;S.match.selMs=null;
+    }
+  }
+}
+
+// ============================
+// RESULT
+// ============================
+function showResult(from){
+  const {score,qs}=S.quiz;
+  const total=qs?qs.length:5;
+  const pct=Math.round(score/total*100);
+  const di=S.day;
+  if(pct>=60&&!S.done.includes(di)){S.done.push(di);addXP(50);save();}
+  const emoji=pct===100?'🏆':pct>=80?'🌟':pct>=60?'😊':'💪';
+  const msg=pct===100?'Sempurna! Anda kuasai semua perkataan hari ini!':
+    pct>=80?'Hampir sempurna! Teruskan semangat ini!':
+    pct>=60?'Lulus! Ulang kaji lagi untuk kuasai sepenuhnya.':
+    'Jangan putus asa! Baca semula & cuba lagi.';
+  document.getElementById('resultBox').innerHTML=`
+    <div class="r-emoji">${emoji}</div>
+    <div class="r-title">${pct>=60?'Hari Selesai!':'Cuba Lagi!'}</div>
+    <div class="r-score">${score}/${total}</div>
+    <div class="r-msg">${msg}</div>
+    <div class="r-btns">
+      <button class="rbtn rs" onclick="openDay(${di})">🔁 Cuba Lagi</button>
+      <button class="rbtn rp" onclick="goHome()">🏠 Menu Utama</button>
+    </div>`;
+  showScreen('resultScreen');
+}
+
+// INIT
+buildHome();
+</script>
+</body>
+</html>
