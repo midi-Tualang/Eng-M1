@@ -21,113 +21,51 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
+    background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; overflow-x: hidden;
   }
-
-  /* ---- starfield bg ---- */
   body::before {
-    content:'';
-    position:fixed; inset:0; z-index:0;
-    background:
-      radial-gradient(ellipse 60% 40% at 20% 20%, #0d1f3c88 0%, transparent 70%),
-      radial-gradient(ellipse 50% 50% at 80% 70%, #1a0a3088 0%, transparent 70%);
+    content:''; position:fixed; inset:0; z-index:0;
+    background: radial-gradient(ellipse 60% 40% at 20% 20%, #0d1f3c88 0%, transparent 70%),
+                radial-gradient(ellipse 50% 50% at 80% 70%, #1a0a3088 0%, transparent 70%);
     pointer-events:none;
   }
-
   .stars {
     position:fixed; inset:0; z-index:0; pointer-events:none;
-    background-image:
-      radial-gradient(1px 1px at 10% 20%, #fff6 0%, transparent 100%),
-      radial-gradient(1px 1px at 50% 80%, #fff4 0%, transparent 100%),
-      radial-gradient(1px 1px at 70% 10%, #fff5 0%, transparent 100%),
-      radial-gradient(1px 1px at 30% 60%, #fff3 0%, transparent 100%),
-      radial-gradient(1px 1px at 85% 40%, #fff4 0%, transparent 100%),
-      radial-gradient(1px 1px at 15% 90%, #fff3 0%, transparent 100%),
-      radial-gradient(1px 1px at 60% 50%, #fff2 0%, transparent 100%);
+    background-image: radial-gradient(1px 1px at 10% 20%, #fff6 0%, transparent 100%), radial-gradient(1px 1px at 50% 80%, #fff4 0%, transparent 100%), radial-gradient(1px 1px at 70% 10%, #fff5 0%, transparent 100%), radial-gradient(1px 1px at 30% 60%, #fff3 0%, transparent 100%), radial-gradient(1px 1px at 85% 40%, #fff4 0%, transparent 100%), radial-gradient(1px 1px at 15% 90%, #fff3 0%, transparent 100%), radial-gradient(1px 1px at 60% 50%, #fff2 0%, transparent 100%);
   }
 
-  /* ---- header ---- */
   header {
-    position:relative; z-index:10;
-    display:flex; align-items:center; justify-content:space-between;
-    padding: 18px 28px;
-    border-bottom: 1px solid var(--border);
-    background: rgba(10,14,26,0.9);
-    backdrop-filter: blur(10px);
+    position:relative; z-index:10; display:flex; align-items:center; justify-content:space-between;
+    padding: 18px 28px; border-bottom: 1px solid var(--border); background: rgba(10,14,26,0.9); backdrop-filter: blur(10px);
   }
-  .logo {
-    font-family:'Space Mono',monospace;
-    font-size: 1.1rem;
-    color: var(--accent);
-    letter-spacing: 2px;
-  }
+  .logo { font-family:'Space Mono',monospace; font-size: 1.1rem; color: var(--accent); letter-spacing: 2px; }
   .logo span { color: var(--accent2); }
-  .week-badge {
-    background: linear-gradient(135deg, var(--accent2), var(--accent));
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 4px 14px;
-    border-radius: 99px;
-    letter-spacing: 1px;
-  }
-  .xp-bar-wrap {
-    display:flex; align-items:center; gap:10px;
-  }
+  .week-badge { background: linear-gradient(135deg, var(--accent2), var(--accent)); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 4px 14px; border-radius: 99px; letter-spacing: 1px; }
+  .xp-bar-wrap { display:flex; align-items:center; gap:10px; }
   .xp-label { font-size:0.75rem; color:var(--warn); font-family:'Space Mono',monospace; }
-  .xp-bar {
-    width:120px; height:8px; background:#1e2d45; border-radius:4px; overflow:hidden;
-  }
-  .xp-fill {
-    height:100%; background: linear-gradient(90deg, var(--warn), #f97316);
-    border-radius:4px; transition:width 0.6s ease;
-  }
+  .xp-bar { width:120px; height:8px; background:#1e2d45; border-radius:4px; overflow:hidden; }
+  .xp-fill { height:100%; background: linear-gradient(90deg, var(--warn), #f97316); border-radius:4px; transition:width 0.6s ease; }
 
-  /* ---- main layout ---- */
-  .app {
-    position:relative; z-index:5;
-    max-width: 940px;
-    margin: 0 auto;
-    padding: 24px 16px 60px;
-  }
-
-  /* ---- screen titles ---- */
+  .app { position:relative; z-index:5; max-width: 940px; margin: 0 auto; padding: 24px 16px 60px; }
   .screen { display:none; animation: fadeIn .35s ease; }
   .screen.active { display:block; }
   @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
 
-  /* ====== HOME SCREEN ====== */
-  .home-title {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 10px;
-  }
+  .home-title { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 10px; }
   .home-title .hl { color: var(--accent); }
-  .home-sub {
-    color: var(--muted); font-size: 1rem; margin-bottom: 36px; max-width: 500px;
-  }
-  .day-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 14px;
-    margin-bottom: 32px;
-  }
-  .day-btn {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 18px 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: all .25s ease;
-    position: relative;
-    overflow: hidden;
-  }
+  .home-sub { color: var(--muted); font-size: 1rem; margin-bottom: 20px; max-width: 500px; }
+  
+  /* Log Masuk UI */
+  .auth-section { text-align: center; margin-bottom: 30px; background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
+  .btn-google { background: #fff; color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; font-family: 'Syne', sans-serif; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; transition: transform 0.2s; }
+  .btn-google:hover { transform: scale(1.02); }
+  .user-info { display: none; color: var(--text); font-weight: bold; }
+  .user-name { color: var(--accent); }
+  .btn-logout { margin-left: 15px; background: none; border: 1px solid var(--danger); color: var(--danger); padding: 5px 12px; border-radius: 4px; cursor: pointer; font-family: 'Syne', sans-serif; transition: 0.2s; }
+  .btn-logout:hover { background: var(--danger); color: #fff; }
+
+  .day-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 14px; margin-bottom: 32px; transition: opacity 0.3s; opacity: 0.4; pointer-events: none; }
+  .day-btn { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 10px; text-align: center; cursor: pointer; transition: all .25s ease; position: relative; overflow: hidden; }
   .day-btn:hover { border-color: var(--accent); transform:translateY(-3px); box-shadow:0 8px 24px #00e5ff22; }
   .day-btn.locked { opacity:.4; cursor:not-allowed; }
   .day-btn.done { border-color: var(--accent3); }
@@ -137,190 +75,71 @@
   .day-btn .tick { position:absolute; top:8px; right:10px; font-size:1rem; }
   .day-btn .day-topic { font-size:0.68rem; color:var(--text); margin-top:6px; opacity:.8; }
 
-  /* Butang Pergi Minggu 2 */
-  #btnMinggu2:hover { filter: brightness(1.1); transform: translateY(-2px); }
-
-  /* ====== LESSON SCREEN ====== */
-  .lesson-header {
-    display:flex; align-items:center; justify-content:space-between;
-    margin-bottom:24px;
-  }
-  .back-btn {
-    background:none; border:1px solid var(--border); color:var(--muted);
-    padding:8px 18px; border-radius:8px; cursor:pointer; font-family:'Syne',sans-serif;
-    font-size:0.85rem; transition: all .2s;
-  }
+  .lesson-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
+  .back-btn { background:none; border:1px solid var(--border); color:var(--muted); padding:8px 18px; border-radius:8px; cursor:pointer; font-family:'Syne',sans-serif; font-size:0.85rem; transition: all .2s; }
   .back-btn:hover { border-color:var(--accent); color:var(--accent); }
   .progress-wrap { display:flex; gap:6px; }
-  .prog-dot {
-    width:28px; height:6px; border-radius:3px;
-    background: var(--border); transition:background .3s;
-  }
+  .prog-dot { width:28px; height:6px; border-radius:3px; background: var(--border); transition:background .3s; }
   .prog-dot.done { background: var(--accent3); }
   .prog-dot.active { background: var(--accent); }
 
-  /* vocab card */
-  .vocab-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 36px 32px;
-    text-align: center;
-    margin-bottom: 20px;
-    position:relative;
-    overflow:hidden;
-  }
-  .vocab-card::before {
-    content:''; position:absolute; top:-40px; right:-40px;
-    width:160px; height:160px;
-    background: radial-gradient(circle, var(--accent2)22 0%, transparent 70%);
-    border-radius:50%;
-  }
-  .vocab-card .category-tag {
-    display:inline-block;
-    background: var(--accent2)33;
-    color: var(--accent2);
-    border:1px solid var(--accent2)55;
-    font-size:0.7rem; font-family:'Space Mono',monospace;
-    padding:3px 12px; border-radius:99px; margin-bottom:16px;
-    letter-spacing:1px; text-transform:uppercase;
-  }
-  .vocab-card .word {
-    font-size: clamp(2.2rem, 6vw, 3.5rem);
-    font-weight: 800;
-    color: var(--accent);
-    margin-bottom: 6px;
-    line-height:1.1;
-  }
-  .vocab-card .phonetic {
-    font-family:'Space Mono',monospace;
-    color: var(--muted); font-size:0.9rem; margin-bottom:14px;
-  }
-  .vocab-card .meaning-ms {
-    font-size: 1.1rem; color: var(--text); font-weight:700; margin-bottom:8px;
-  }
-  .vocab-card .example {
-    font-size:0.9rem; color:var(--muted); font-style:italic;
-    border-left:3px solid var(--accent2); padding-left:14px; text-align:left;
-    margin-top:12px;
-  }
-  .vocab-card .example-ms {
-    font-size:0.82rem; color:var(--muted)aa; padding-left:14px; text-align:left; margin-top:4px;
-  }
+  .vocab-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 36px 32px; text-align: center; margin-bottom: 20px; position:relative; overflow:hidden; }
+  .vocab-card::before { content:''; position:absolute; top:-40px; right:-40px; width:160px; height:160px; background: radial-gradient(circle, var(--accent2)22 0%, transparent 70%); border-radius:50%; }
+  .vocab-card .category-tag { display:inline-block; background: var(--accent2)33; color: var(--accent2); border:1px solid var(--accent2)55; font-size:0.7rem; font-family:'Space Mono',monospace; padding:3px 12px; border-radius:99px; margin-bottom:16px; letter-spacing:1px; text-transform:uppercase; }
+  .vocab-card .word { font-size: clamp(2.2rem, 6vw, 3.5rem); font-weight: 800; color: var(--accent); margin-bottom: 6px; line-height:1.1; }
+  .vocab-card .phonetic { font-family:'Space Mono',monospace; color: var(--muted); font-size:0.9rem; margin-bottom:14px; }
+  .vocab-card .meaning-ms { font-size: 1.1rem; color: var(--text); font-weight:700; margin-bottom:8px; }
+  .vocab-card .example { font-size:0.9rem; color:var(--muted); font-style:italic; border-left:3px solid var(--accent2); padding-left:14px; text-align:left; margin-top:12px; }
+  .vocab-card .example-ms { font-size:0.82rem; color:var(--muted)aa; padding-left:14px; text-align:left; margin-top:4px; }
 
-  .speak-btn {
-    display:inline-flex; align-items:center; gap:8px;
-    background: linear-gradient(135deg, var(--accent2), var(--accent));
-    color:#fff; border:none; padding:12px 28px; border-radius:12px;
-    font-family:'Syne',sans-serif; font-size:1rem; font-weight:700;
-    cursor:pointer; margin-top:18px; transition:all .2s;
-  }
+  .speak-btn { display:inline-flex; align-items:center; gap:8px; background: linear-gradient(135deg, var(--accent2), var(--accent)); color:#fff; border:none; padding:12px 28px; border-radius:12px; font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; cursor:pointer; margin-top:18px; transition:all .2s; }
   .speak-btn:hover { transform:scale(1.04); box-shadow:0 6px 20px var(--accent2)55; }
-  .speak-btn:active { transform:scale(.98); }
   .speak-btn.speaking { animation: pulse 0.6s infinite alternate; }
   @keyframes pulse { from{box-shadow:0 0 0 0 var(--accent)44} to{box-shadow:0 0 0 12px transparent} }
 
-  .nav-btns {
-    display:flex; gap:12px; justify-content:center; margin-top:20px;
-  }
-  .nav-btn {
-    padding:12px 32px; border-radius:12px; font-family:'Syne',sans-serif;
-    font-weight:700; font-size:0.95rem; cursor:pointer; border:none; transition:all .2s;
-  }
+  .nav-btns { display:flex; gap:12px; justify-content:center; margin-top:20px; }
+  .nav-btn { padding:12px 32px; border-radius:12px; font-family:'Syne',sans-serif; font-weight:700; font-size:0.95rem; cursor:pointer; border:none; transition:all .2s; }
   .nav-btn.prev { background:var(--card); border:1px solid var(--border); color:var(--muted); }
   .nav-btn.prev:hover { border-color:var(--accent); color:var(--accent); }
   .nav-btn.next { background: var(--accent); color: #000; }
   .nav-btn.next:hover { background: #33eeff; }
 
-  /* ====== QUIZ SCREEN ====== */
-  .quiz-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 32px;
-    margin-bottom: 20px;
-  }
-  .quiz-q {
-    font-size:0.85rem; color:var(--muted); font-family:'Space Mono',monospace;
-    margin-bottom:10px; text-transform:uppercase; letter-spacing:1px;
-  }
-  .quiz-word {
-    font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight:800; color:var(--accent);
-    margin-bottom: 8px;
-  }
+  .quiz-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; margin-bottom: 20px; }
+  .quiz-q { font-size:0.85rem; color:var(--muted); font-family:'Space Mono',monospace; margin-bottom:10px; text-transform:uppercase; letter-spacing:1px; }
+  .quiz-word { font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight:800; color:var(--accent); margin-bottom: 8px; }
   .quiz-phonetic { font-family:'Space Mono',monospace; color:var(--muted); font-size:0.85rem; margin-bottom:20px; }
-  .quiz-speak-btn {
-    background: var(--card); border:1px solid var(--accent2);
-    color:var(--accent2); padding:8px 20px; border-radius:8px;
-    font-family:'Syne',sans-serif; cursor:pointer; font-size:0.85rem; margin-bottom:24px;
-    transition:all .2s;
-  }
+  .quiz-speak-btn { background: var(--card); border:1px solid var(--accent2); color:var(--accent2); padding:8px 20px; border-radius:8px; font-family:'Syne',sans-serif; cursor:pointer; font-size:0.85rem; margin-bottom:24px; transition:all .2s; }
   .quiz-speak-btn:hover { background:var(--accent2)22; }
 
-  .options-grid {
-    display:grid; grid-template-columns:1fr 1fr; gap:10px;
-  }
-  .option-btn {
-    padding:14px 16px; border-radius:12px;
-    background: var(--panel); border:1px solid var(--border);
-    color:var(--text); font-family:'Syne',sans-serif; font-size:0.9rem;
-    cursor:pointer; text-align:left; transition:all .2s; line-height:1.4;
-  }
+  .options-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .option-btn { padding:14px 16px; border-radius:12px; background: var(--panel); border:1px solid var(--border); color:var(--text); font-family:'Syne',sans-serif; font-size:0.9rem; cursor:pointer; text-align:left; transition:all .2s; line-height:1.4; }
   .option-btn:hover:not(:disabled) { border-color:var(--accent); background:var(--accent)11; }
   .option-btn.correct { background:var(--accent3)22; border-color:var(--accent3); color:var(--accent3); }
   .option-btn.wrong { background:var(--danger)22; border-color:var(--danger); color:var(--danger); }
   .option-btn:disabled { cursor:not-allowed; }
-  .feedback {
-    margin-top:16px; padding:12px 16px; border-radius:10px;
-    font-size:0.9rem; display:none;
-  }
+  .feedback { margin-top:16px; padding:12px 16px; border-radius:10px; font-size:0.9rem; display:none; }
   .feedback.show { display:block; }
   .feedback.ok { background:var(--accent3)22; border:1px solid var(--accent3)55; color:var(--accent3); }
   .feedback.bad { background:var(--danger)22; border:1px solid var(--danger)55; color:var(--danger); }
-
-  .quiz-next-btn {
-    width:100%; margin-top:14px; padding:14px;
-    background: var(--accent); color:#000;
-    border:none; border-radius:12px; font-family:'Syne',sans-serif;
-    font-weight:700; font-size:1rem; cursor:pointer; display:none;
-    transition:all .2s;
-  }
+  .quiz-next-btn { width:100%; margin-top:14px; padding:14px; background: var(--accent); color:#000; border:none; border-radius:12px; font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; cursor:pointer; display:none; transition:all .2s; }
   .quiz-next-btn.show { display:block; }
   .quiz-next-btn:hover { background:#33eeff; }
 
-  /* ====== RESULT SCREEN ====== */
   .result-wrap { text-align:center; padding: 40px 20px; }
   .result-emoji { font-size:5rem; margin-bottom:16px; }
   .result-title { font-size:2.2rem; font-weight:800; margin-bottom:10px; }
-  .result-score { font-size:3.5rem; font-weight:800; color:var(--accent); margin-bottom:20px;
-    font-family:'Space Mono',monospace; }
+  .result-score { font-size:3.5rem; font-weight:800; color:var(--accent); margin-bottom:20px; font-family:'Space Mono',monospace; }
   .result-msg { color:var(--muted); max-width:400px; margin:0 auto 32px; line-height:1.6; }
   .result-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
-  .rbtn {
-    padding:14px 28px; border-radius:12px; font-family:'Syne',sans-serif;
-    font-weight:700; cursor:pointer; border:none; font-size:1rem; transition:all .2s;
-  }
+  .rbtn { padding:14px 28px; border-radius:12px; font-family:'Syne',sans-serif; font-weight:700; cursor:pointer; border:none; font-size:1rem; transition:all .2s; }
   .rbtn.primary { background:var(--accent); color:#000; }
   .rbtn.primary:hover { background:#33eeff; }
   .rbtn.secondary { background:var(--card); border:1px solid var(--border); color:var(--text); }
   .rbtn.secondary:hover { border-color:var(--accent); }
 
-  /* ====== MODE TABS ====== */
-  .mode-tabs {
-    display:flex; gap:8px; margin-bottom:24px;
-  }
-  .mode-tab {
-    padding:8px 20px; border-radius:8px; font-family:'Syne',sans-serif;
-    font-size:0.85rem; font-weight:700; cursor:pointer; border:1px solid var(--border);
-    background:var(--card); color:var(--muted); transition:all .2s;
-  }
+  .mode-tabs { display:flex; gap:8px; margin-bottom:24px; }
+  .mode-tab { padding:8px 20px; border-radius:8px; font-family:'Syne',sans-serif; font-size:0.85rem; font-weight:700; cursor:pointer; border:1px solid var(--border); background:var(--card); color:var(--muted); transition:all .2s; }
   .mode-tab.active { background:var(--accent2); border-color:var(--accent2); color:#fff; }
-
-  /* responsive */
-  @media(max-width:520px){
-    .options-grid { grid-template-columns:1fr; }
-    .day-grid { grid-template-columns:repeat(3,1fr); }
-  }
 </style>
 </head>
 <body>
@@ -340,9 +159,21 @@
   <div class="screen active" id="homeScreen">
     <div class="home-title">Belajar <span class="hl">English IT</span><br>Dalam 7 Hari 🚀</div>
     <div class="home-sub">Setiap hari ada 5 perkataan + kuiz. Dengar sebutan, faham makna, jawab soalan!</div>
+    
+    <div class="auth-section">
+      <button id="btnLogin" class="btn-google" onclick="login()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/><path fill="none" d="M1 1h22v22H1z"/></svg>
+        Log Masuk dengan Google
+      </button>
+      <div id="userInfo" class="user-info">
+        👤 Selamat datang, <span id="userName" class="user-name"></span>!
+        <button onclick="logout()" class="btn-logout">Log Keluar</button>
+      </div>
+    </div>
+
     <div class="day-grid" id="dayGrid"></div>
     <p style="color:var(--muted);font-size:0.8rem;font-family:'Space Mono',monospace;">
-      💡 Klik sebarang hari untuk belajar. Selesaikan untuk buka hari berikutnya.
+      💡 Selesaikan hari sebelumnya untuk buka hari berikutnya.
     </p>
 
     <button id="btnMinggu2" onclick="window.location.href='minggu2.html'" style="display:none; width:100%; margin-top:20px; padding:16px; background:linear-gradient(135deg, var(--accent2), var(--accent)); color:#fff; border:none; border-radius:12px; font-family:'Syne',sans-serif; font-weight:800; font-size:1.1rem; cursor:pointer; text-align:center; transition: transform 0.2s;">
@@ -379,428 +210,352 @@
 
 </div>
 
-<script>
-// ========================
-// DATA – 7 days × 5 words
-// ========================
-const curriculum = [
-  {
-    day: 1,
-    topic: "Asas Komputer",
-    words: [
-      { word:"Hardware", phonetic:"/ˈhɑːdwɛər/", ms:"Perkakasan", category:"Komputer",
-        example:"The hardware includes the CPU and RAM.", exampleMs:"Perkakasan termasuk CPU dan RAM.",
-        speech:"Hardware" },
-      { word:"Software", phonetic:"/ˈsɒftwɛər/", ms:"Perisian", category:"Komputer",
-        example:"Microsoft Word is a software application.", exampleMs:"Microsoft Word adalah aplikasi perisian.",
-        speech:"Software" },
-      { word:"Network", phonetic:"/ˈnɛtwɜːk/", ms:"Rangkaian", category:"Rangkaian",
-        example:"The network connects all computers in the office.", exampleMs:"Rangkaian menghubungkan semua komputer di pejabat.",
-        speech:"Network" },
-      { word:"Database", phonetic:"/ˈdeɪtəbeɪs/", ms:"Pangkalan Data", category:"Data",
-        example:"All user data is stored in the database.", exampleMs:"Semua data pengguna disimpan dalam pangkalan data.",
-        speech:"Database" },
-      { word:"Server", phonetic:"/ˈsɜːvər/", ms:"Pelayan / Server", category:"Infrastruktur",
-        example:"The web server handles thousands of requests.", exampleMs:"Server web mengendalikan ribuan permintaan.",
-        speech:"Server" },
-    ]
-  },
-  {
-    day: 2,
-    topic: "Internet & Web",
-    words: [
-      { word:"Browser", phonetic:"/ˈbraʊzər/", ms:"Pelayar Web", category:"Internet",
-        example:"Chrome is a popular web browser.", exampleMs:"Chrome adalah pelayar web yang popular.",
-        speech:"Browser" },
-      { word:"Download", phonetic:"/ˈdaʊnloʊd/", ms:"Muat Turun", category:"Internet",
-        example:"Please download the latest version.", exampleMs:"Sila muat turun versi terbaru.",
-        speech:"Download" },
-      { word:"Upload", phonetic:"/ˈʌploʊd/", ms:"Muat Naik", category:"Internet",
-        example:"You need to upload your photo here.", exampleMs:"Anda perlu muat naik gambar anda di sini.",
-        speech:"Upload" },
-      { word:"Password", phonetic:"/ˈpɑːswɜːd/", ms:"Kata Laluan", category:"Keselamatan",
-        example:"Use a strong password with numbers and symbols.", exampleMs:"Gunakan kata laluan yang kuat dengan nombor dan simbol.",
-        speech:"Password" },
-      { word:"Username", phonetic:"/ˈjuːzərneɪm/", ms:"Nama Pengguna", category:"Akaun",
-        example:"Your username must be unique.", exampleMs:"Nama pengguna anda mestilah unik.",
-        speech:"Username" },
-    ]
-  },
-  {
-    day: 3,
-    topic: "Keselamatan Siber",
-    words: [
-      { word:"Firewall", phonetic:"/ˈfaɪərwɔːl/", ms:"Tembok Api / Firewall", category:"Keselamatan",
-        example:"The firewall blocks unauthorized access.", exampleMs:"Firewall menyekat akses yang tidak dibenarkan.",
-        speech:"Firewall" },
-      { word:"Encryption", phonetic:"/ɪnˈkrɪpʃən/", ms:"Penyulitan", category:"Keselamatan",
-        example:"Encryption protects your private data.", exampleMs:"Penyulitan melindungi data peribadi anda.",
-        speech:"Encryption" },
-      { word:"Virus", phonetic:"/ˈvaɪrəs/", ms:"Virus (komputer)", category:"Ancaman",
-        example:"A computer virus can corrupt your files.", exampleMs:"Virus komputer boleh merosakkan fail anda.",
-        speech:"Virus" },
-      { word:"Backup", phonetic:"/ˈbækʌp/", ms:"Sandaran", category:"Data",
-        example:"Always make a backup before updating.", exampleMs:"Sentiasa buat sandaran sebelum kemaskini.",
-        speech:"Backup" },
-      { word:"Authentication", phonetic:"/ɔːˌθɛntɪˈkeɪʃən/", ms:"Pengesahan Identiti", category:"Keselamatan",
-        example:"Two-factor authentication adds extra security.", exampleMs:"Pengesahan dua faktor menambah keselamatan.",
-        speech:"Authentication" },
-    ]
-  },
-  {
-    day: 4,
-    topic: "Pengaturcaraan",
-    words: [
-      { word:"Algorithm", phonetic:"/ˈælɡərɪðəm/", ms:"Algoritma", category:"Coding",
-        example:"A sorting algorithm organizes data efficiently.", exampleMs:"Algoritma pengisihan menyusun data dengan cekap.",
-        speech:"Algorithm" },
-      { word:"Variable", phonetic:"/ˈvɛəriəbəl/", ms:"Pemboleh Ubah", category:"Coding",
-        example:"Declare a variable to store the value.", exampleMs:"Isytihar pemboleh ubah untuk menyimpan nilai.",
-        speech:"Variable" },
-      { word:"Function", phonetic:"/ˈfʌŋkʃən/", ms:"Fungsi", category:"Coding",
-        example:"This function calculates the total price.", exampleMs:"Fungsi ini mengira jumlah harga.",
-        speech:"Function" },
-      { word:"Bug", phonetic:"/bʌɡ/", ms:"Pepijat / Ralat", category:"Coding",
-        example:"There is a bug in the login page.", exampleMs:"Terdapat pepijat pada halaman log masuk.",
-        speech:"Bug" },
-      { word:"Debug", phonetic:"/diːˈbʌɡ/", ms:"Menyahpepijat / Betulkan Ralat", category:"Coding",
-        example:"We need to debug this code before release.", exampleMs:"Kita perlu menyahpepijat kod ini sebelum dilancarkan.",
-        speech:"Debug" },
-    ]
-  },
-  {
-    day: 5,
-    topic: "Awan & Storan",
-    words: [
-      { word:"Cloud", phonetic:"/klaʊd/", ms:"Awan (Cloud)", category:"Awan",
-        example:"We store files on the cloud.", exampleMs:"Kami menyimpan fail di awan.",
-        speech:"Cloud" },
-      { word:"Storage", phonetic:"/ˈstɔːrɪdʒ/", ms:"Storan / Simpanan", category:"Awan",
-        example:"You have used 80% of your storage.", exampleMs:"Anda telah menggunakan 80% storan anda.",
-        speech:"Storage" },
-      { word:"Bandwidth", phonetic:"/ˈbændwɪdθ/", ms:"Jalur Lebar", category:"Rangkaian",
-        example:"Streaming video uses a lot of bandwidth.", exampleMs:"Video penstriman menggunakan banyak jalur lebar.",
-        speech:"Bandwidth" },
-      { word:"Virtual", phonetic:"/ˈvɜːtʃuəl/", ms:"Maya / Virtual", category:"Awan",
-        example:"A virtual machine runs software independently.", exampleMs:"Mesin maya menjalankan perisian secara bebas.",
-        speech:"Virtual" },
-      { word:"Scalable", phonetic:"/ˈskeɪləbəl/", ms:"Boleh Diskala / Fleksibel", category:"Awan",
-        example:"This system is scalable for more users.", exampleMs:"Sistem ini boleh diskala untuk lebih ramai pengguna.",
-        speech:"Scalable" },
-    ]
-  },
-  {
-    day: 6,
-    topic: "Sistem & OS",
-    words: [
-      { word:"Operating System", phonetic:"/ˈɒpəreɪtɪŋ ˈsɪstəm/", ms:"Sistem Operasi", category:"OS",
-        example:"Windows is a widely used operating system.", exampleMs:"Windows adalah sistem operasi yang banyak digunakan.",
-        speech:"Operating System" },
-      { word:"Install", phonetic:"/ɪnˈstɔːl/", ms:"Pasang / Install", category:"OS",
-        example:"Please install the driver first.", exampleMs:"Sila pasang pemacu terlebih dahulu.",
-        speech:"Install" },
-      { word:"Update", phonetic:"/ˈʌpdeɪt/", ms:"Kemaskini", category:"OS",
-        example:"Restart after the system update completes.", exampleMs:"Mulakan semula selepas kemaskini sistem selesai.",
-        speech:"Update" },
-      { word:"Permission", phonetic:"/pərˈmɪʃən/", ms:"Kebenaran / Keistimewaan", category:"OS",
-        example:"You need admin permission to install this.", exampleMs:"Anda memerlukan kebenaran admin untuk memasang ini.",
-        speech:"Permission" },
-      { word:"Process", phonetic:"/ˈprɒsɛs/", ms:"Proses", category:"OS",
-        example:"End the process if it is not responding.", exampleMs:"Tamatkan proses jika ia tidak bertindak balas.",
-        speech:"Process" },
-    ]
-  },
-  {
-    day: 7,
-    topic: "Ayat IT Harian",
-    words: [
-      { word:"Have you tried restarting it?", phonetic:"/hæv juː traɪd riːˈstɑːtɪŋ ɪt/", ms:"Pernahkah awak cuba mulakan semula?", category:"Ayat",
-        example:"Common IT support phrase.", exampleMs:"Ayat sokongan IT yang biasa.",
-        speech:"Have you tried restarting it?" },
-      { word:"Please submit a ticket.", phonetic:"/pliːz səbˈmɪt ə ˈtɪkɪt/", ms:"Sila hantar tiket aduan.", category:"Ayat",
-        example:"Said when a problem needs formal logging.", exampleMs:"Digunakan apabila masalah perlu dilog secara formal.",
-        speech:"Please submit a ticket." },
-      { word:"The system is down.", phonetic:"/ðə ˈsɪstəm ɪz daʊn/", ms:"Sistem tidak berfungsi sekarang.", category:"Ayat",
-        example:"Said when a server or service is unavailable.", exampleMs:"Digunakan apabila pelayan atau perkhidmatan tidak tersedia.",
-        speech:"The system is down." },
-      { word:"Check your internet connection.", phonetic:"/tʃɛk jɔːr ˈɪntənɛt kəˈnɛkʃən/", ms:"Periksa sambungan internet anda.", category:"Ayat",
-        example:"First step in troubleshooting network issues.", exampleMs:"Langkah pertama dalam menyelesaikan masalah rangkaian.",
-        speech:"Check your internet connection." },
-      { word:"Access denied.", phonetic:"/ˈæksɛs dɪˈnaɪd/", ms:"Akses ditolak / tiada kebenaran.", category:"Ayat",
-        example:"You see this when you lack permission.", exampleMs:"Anda akan nampak ini apabila tiada kebenaran.",
-        speech:"Access denied." },
-    ]
-  }
-];
+<script type="module">
+  // IMPORT FIREBASE SDK
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
-// ========================
-// STATE
-// ========================
-let state = {
-  completedDays: JSON.parse(localStorage.getItem('iteng_done') || '[]'),
-  xp: parseInt(localStorage.getItem('iteng_xp') || '0'),
-  currentDay: null,
-  currentWord: 0,
-  mode: 'learn',
-  quiz: { questions:[], idx:0, score:0, answered:false }
-};
+  // CONFIGURATION FIREBASE
+  const firebaseConfig = {
+    apiKey: "AIzaSyBjcs3mAAEZZo-AgLiq8tjNT6zhzzy-7qI",
+    authDomain: "it-english-app-14f35.firebaseapp.com",
+    projectId: "it-english-app-14f35",
+    storageBucket: "it-english-app-14f35.firebasestorage.app",
+    messagingSenderId: "342310757564",
+    appId: "1:342310757564:web:7a0eb1823bac1988105cb9"
+  };
 
-function saveState() {
-  localStorage.setItem('iteng_done', JSON.stringify(state.completedDays));
-  localStorage.setItem('iteng_xp', state.xp);
-}
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
 
-// ========================
-// XP UI
-// ========================
-function updateXP(add=0) {
-  state.xp = Math.min(state.xp + add, 700);
-  saveState();
-  document.getElementById('xpNum').textContent = state.xp;
-  document.getElementById('xpFill').style.width = (state.xp / 700 * 100) + '%';
-}
-updateXP(0);
+  // STATE APLIKASI
+  let currentUser = null;
+  let state = {
+    completedDays: [],
+    xp: 0,
+    currentDay: null,
+    currentWord: 0,
+    mode: 'learn',
+    quiz: { questions:[], idx:0, score:0, answered:false }
+  };
 
-// ========================
-// HOME
-// ========================
-function buildHome() {
-  const grid = document.getElementById('dayGrid');
-  grid.innerHTML = '';
-  curriculum.forEach((day, i) => {
-    const done = state.completedDays.includes(i);
-    const locked = i > 0 && !state.completedDays.includes(i-1);
-    const btn = document.createElement('div');
-    btn.className = 'day-btn' + (done?' done':'') + (locked?' locked':'');
-    btn.innerHTML = `
-      <div class="day-num">Hari ${day.day}</div>
-      <div class="day-topic">${day.topic}</div>
-      <div class="day-label">${day.words.length} perkataan</div>
-      ${done ? '<div class="tick">✅</div>' : ''}
-      ${locked ? '<div class="tick">🔒</div>' : ''}
-    `;
-    if (!locked) btn.onclick = () => openDay(i);
-    grid.appendChild(btn);
+  // FUNGSI LOG MASUK/KELUAR
+  window.login = () => {
+    signInWithPopup(auth, provider).catch(error => alert("Ralat Log Masuk: " + error.message));
+  };
+
+  window.logout = () => {
+    signOut(auth).then(() => {
+      state.completedDays = [];
+      state.xp = 0;
+      window.updateXP(0);
+      window.buildHome();
+    });
+  };
+
+  // PANTAU STATUS LOG MASUK
+  onAuthStateChanged(auth, async (user) => {
+    const btnLogin = document.getElementById('btnLogin');
+    const userInfo = document.getElementById('userInfo');
+    const userName = document.getElementById('userName');
+    const grid = document.getElementById('dayGrid');
+    
+    if (user) {
+      currentUser = user;
+      btnLogin.style.display = 'none';
+      userInfo.style.display = 'block';
+      userName.textContent = user.displayName;
+      grid.style.opacity = '1';
+      grid.style.pointerEvents = 'auto';
+      
+      // Muat Turun Data dari Firestore
+      const docRef = doc(db, "users_minggu1", user.uid);
+      const docSnap = await getDoc(docRef);
+      
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        state.completedDays = data.completedDays || [];
+        state.xp = data.xp || 0;
+      } else {
+        // Daftar murid baharu
+        state.completedDays = [];
+        state.xp = 0;
+        await setDoc(docRef, { completedDays: [], xp: 0 });
+      }
+      window.updateXP(0);
+      window.buildHome();
+      
+    } else {
+      currentUser = null;
+      btnLogin.style.display = 'inline-flex';
+      userInfo.style.display = 'none';
+      grid.style.opacity = '0.4';
+      grid.style.pointerEvents = 'none';
+      
+      state.completedDays = [];
+      state.xp = 0;
+      window.updateXP(0);
+      window.buildHome();
+    }
   });
 
-  // Tunjukkan butang "Pergi ke Minggu 2" jika Hari 7 (index ke-6) telah selesai
-  const btnM2 = document.getElementById('btnMinggu2');
-  if (state.completedDays.includes(6)) {
-    btnM2.style.display = 'block';
-  } else {
-    btnM2.style.display = 'none';
-  }
-}
-
-// ========================
-// NAVIGATION
-// ========================
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-function goHome() { showScreen('homeScreen'); buildHome(); }
-
-function openDay(idx) {
-  state.currentDay = idx;
-  state.currentWord = 0;
-  state.mode = 'learn';
-  setMode('learn');
-  showScreen('lessonScreen');
-  renderProgress();
-  renderVocab();
-}
-
-// ========================
-// LESSON
-// ========================
-function setMode(m) {
-  state.mode = m;
-  document.getElementById('tabLearn').className = 'mode-tab' + (m==='learn'?' active':'');
-  document.getElementById('tabQuiz').className = 'mode-tab' + (m==='quiz'?' active':'');
-  document.getElementById('learnMode').style.display = m==='learn' ? '' : 'none';
-  document.getElementById('quizMode').style.display = m==='quiz' ? '' : 'none';
-  if (m==='quiz') startQuiz();
-}
-
-function renderProgress() {
-  const words = curriculum[state.currentDay].words;
-  const wrap = document.getElementById('lessonProgress');
-  wrap.innerHTML = '';
-  words.forEach((_, i) => {
-    const d = document.createElement('div');
-    d.className = 'prog-dot' + (i < state.currentWord ? ' done' : i === state.currentWord ? ' active' : '');
-    wrap.appendChild(d);
-  });
-}
-
-function renderVocab() {
-  const day = curriculum[state.currentDay];
-  const w = day.words[state.currentWord];
-  document.getElementById('vocabCard').innerHTML = `
-    <div class="category-tag">${w.category}</div>
-    <div class="word">${w.word}</div>
-    <div class="phonetic">${w.phonetic}</div>
-    <div class="meaning-ms">🇲🇾 ${w.ms}</div>
-    <div class="example">"${w.example}"</div>
-    <div class="example-ms">${w.exampleMs}</div>
-    <button class="speak-btn" id="speakMainBtn" onclick="speak('${escQ(w.speech)}', 'speakMainBtn')">
-      🔊 Dengar Sebutan
-    </button>
-  `;
-  renderProgress();
-}
-
-function escQ(s) { return s.replace(/'/g,"&#39;"); }
-
-function prevWord() {
-  if (state.currentWord > 0) { state.currentWord--; renderVocab(); }
-}
-function nextWord() {
-  const words = curriculum[state.currentDay].words;
-  if (state.currentWord < words.length - 1) {
-    state.currentWord++;
-    renderVocab();
-  } else {
-    // prompt quiz
-    if (confirm('Tahniah! Anda dah belajar semua perkataan hari ini. 🎉\nNak cuba kuiz sekarang?')) {
-      setMode('quiz');
+  // FUNGSI SIMPAN KE FIREBASE
+  window.saveState = async function() {
+    if (currentUser) {
+      try {
+        const docRef = doc(db, "users_minggu1", currentUser.uid);
+        await setDoc(docRef, {
+          completedDays: state.completedDays,
+          xp: state.xp
+        }, { merge: true });
+      } catch (e) {
+        console.error("Gagal simpan ke awan: ", e);
+      }
     }
   }
-}
 
-// ========================
-// SPEECH
-// ========================
-function speak(text, btnId) {
-  window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(text);
-  utt.lang = 'en-GB';
-  utt.rate = 0.85;
-  utt.pitch = 1.0;
-  // Try to pick a good voice
-  const voices = window.speechSynthesis.getVoices();
-  const preferred = voices.find(v => v.lang.startsWith('en') && v.name.includes('Female'))
-    || voices.find(v => v.lang.startsWith('en'))
-    || voices[0];
-  if (preferred) utt.voice = preferred;
-  if (btnId) {
-    const btn = document.getElementById(btnId);
-    if (btn) { btn.classList.add('speaking'); utt.onend = () => btn.classList.remove('speaking'); }
-  }
-  window.speechSynthesis.speak(utt);
-}
+  // DATA MINGGU 1
+  const curriculum = [
+    { day: 1, topic: "Asas Komputer", words: [
+        { word:"Hardware", phonetic:"/ˈhɑːdwɛər/", ms:"Perkakasan", category:"Komputer", example:"The hardware includes the CPU and RAM.", exampleMs:"Perkakasan termasuk CPU dan RAM.", speech:"Hardware" },
+        { word:"Software", phonetic:"/ˈsɒftwɛər/", ms:"Perisian", category:"Komputer", example:"Microsoft Word is a software application.", exampleMs:"Microsoft Word adalah aplikasi perisian.", speech:"Software" },
+        { word:"Network", phonetic:"/ˈnɛtwɜːk/", ms:"Rangkaian", category:"Rangkaian", example:"The network connects all computers in the office.", exampleMs:"Rangkaian menghubungkan semua komputer di pejabat.", speech:"Network" },
+        { word:"Database", phonetic:"/ˈdeɪtəbeɪs/", ms:"Pangkalan Data", category:"Data", example:"All user data is stored in the database.", exampleMs:"Semua data pengguna disimpan dalam pangkalan data.", speech:"Database" },
+        { word:"Server", phonetic:"/ˈsɜːvər/", ms:"Pelayan / Server", category:"Infrastruktur", example:"The web server handles thousands of requests.", exampleMs:"Server web mengendalikan ribuan permintaan.", speech:"Server" }
+    ]},
+    { day: 2, topic: "Internet & Web", words: [
+        { word:"Browser", phonetic:"/ˈbraʊzər/", ms:"Pelayar Web", category:"Internet", example:"Chrome is a popular web browser.", exampleMs:"Chrome adalah pelayar web yang popular.", speech:"Browser" },
+        { word:"Download", phonetic:"/ˈdaʊnloʊd/", ms:"Muat Turun", category:"Internet", example:"Please download the latest version.", exampleMs:"Sila muat turun versi terbaru.", speech:"Download" },
+        { word:"Upload", phonetic:"/ˈʌploʊd/", ms:"Muat Naik", category:"Internet", example:"You need to upload your photo here.", exampleMs:"Anda perlu muat naik gambar anda di sini.", speech:"Upload" },
+        { word:"Password", phonetic:"/ˈpɑːswɜːd/", ms:"Kata Laluan", category:"Keselamatan", example:"Use a strong password with numbers and symbols.", exampleMs:"Gunakan kata laluan yang kuat dengan nombor dan simbol.", speech:"Password" },
+        { word:"Username", phonetic:"/ˈjuːzərneɪm/", ms:"Nama Pengguna", category:"Akaun", example:"Your username must be unique.", exampleMs:"Nama pengguna anda mestilah unik.", speech:"Username" }
+    ]},
+    { day: 3, topic: "Keselamatan Siber", words: [
+        { word:"Firewall", phonetic:"/ˈfaɪərwɔːl/", ms:"Tembok Api / Firewall", category:"Keselamatan", example:"The firewall blocks unauthorized access.", exampleMs:"Firewall menyekat akses yang tidak dibenarkan.", speech:"Firewall" },
+        { word:"Encryption", phonetic:"/ɪnˈkrɪpʃən/", ms:"Penyulitan", category:"Keselamatan", example:"Encryption protects your private data.", exampleMs:"Penyulitan melindungi data peribadi anda.", speech:"Encryption" },
+        { word:"Virus", phonetic:"/ˈvaɪrəs/", ms:"Virus (komputer)", category:"Ancaman", example:"A computer virus can corrupt your files.", exampleMs:"Virus komputer boleh merosakkan fail anda.", speech:"Virus" },
+        { word:"Backup", phonetic:"/ˈbækʌp/", ms:"Sandaran", category:"Data", example:"Always make a backup before updating.", exampleMs:"Sentiasa buat sandaran sebelum kemaskini.", speech:"Backup" },
+        { word:"Authentication", phonetic:"/ɔːˌθɛntɪˈkeɪʃən/", ms:"Pengesahan Identiti", category:"Keselamatan", example:"Two-factor authentication adds extra security.", exampleMs:"Pengesahan dua faktor menambah keselamatan.", speech:"Authentication" }
+    ]},
+    { day: 4, topic: "Pengaturcaraan", words: [
+        { word:"Algorithm", phonetic:"/ˈælɡərɪðəm/", ms:"Algoritma", category:"Coding", example:"A sorting algorithm organizes data efficiently.", exampleMs:"Algoritma pengisihan menyusun data dengan cekap.", speech:"Algorithm" },
+        { word:"Variable", phonetic:"/ˈvɛəriəbəl/", ms:"Pemboleh Ubah", category:"Coding", example:"Declare a variable to store the value.", exampleMs:"Isytihar pemboleh ubah untuk menyimpan nilai.", speech:"Variable" },
+        { word:"Function", phonetic:"/ˈfʌŋkʃən/", ms:"Fungsi", category:"Coding", example:"This function calculates the total price.", exampleMs:"Fungsi ini mengira jumlah harga.", speech:"Function" },
+        { word:"Bug", phonetic:"/bʌɡ/", ms:"Pepijat / Ralat", category:"Coding", example:"There is a bug in the login page.", exampleMs:"Terdapat pepijat pada halaman log masuk.", speech:"Bug" },
+        { word:"Debug", phonetic:"/diːˈbʌɡ/", ms:"Menyahpepijat / Betulkan Ralat", category:"Coding", example:"We need to debug this code before release.", exampleMs:"Kita perlu menyahpepijat kod ini sebelum dilancarkan.", speech:"Debug" }
+    ]},
+    { day: 5, topic: "Awan & Storan", words: [
+        { word:"Cloud", phonetic:"/klaʊd/", ms:"Awan (Cloud)", category:"Awan", example:"We store files on the cloud.", exampleMs:"Kami menyimpan fail di awan.", speech:"Cloud" },
+        { word:"Storage", phonetic:"/ˈstɔːrɪdʒ/", ms:"Storan / Simpanan", category:"Awan", example:"You have used 80% of your storage.", exampleMs:"Anda telah menggunakan 80% storan anda.", speech:"Storage" },
+        { word:"Bandwidth", phonetic:"/ˈbændwɪdθ/", ms:"Jalur Lebar", category:"Rangkaian", example:"Streaming video uses a lot of bandwidth.", exampleMs:"Video penstriman menggunakan banyak jalur lebar.", speech:"Bandwidth" },
+        { word:"Virtual", phonetic:"/ˈvɜːtʃuəl/", ms:"Maya / Virtual", category:"Awan", example:"A virtual machine runs software independently.", exampleMs:"Mesin maya menjalankan perisian secara bebas.", speech:"Virtual" },
+        { word:"Scalable", phonetic:"/ˈskeɪləbəl/", ms:"Boleh Diskala / Fleksibel", category:"Awan", example:"This system is scalable for more users.", exampleMs:"Sistem ini boleh diskala untuk lebih ramai pengguna.", speech:"Scalable" }
+    ]},
+    { day: 6, topic: "Sistem & OS", words: [
+        { word:"Operating System", phonetic:"/ˈɒpəreɪtɪŋ ˈsɪstəm/", ms:"Sistem Operasi", category:"OS", example:"Windows is a widely used operating system.", exampleMs:"Windows adalah sistem operasi yang banyak digunakan.", speech:"Operating System" },
+        { word:"Install", phonetic:"/ɪnˈstɔːl/", ms:"Pasang / Install", category:"OS", example:"Please install the driver first.", exampleMs:"Sila pasang pemacu terlebih dahulu.", speech:"Install" },
+        { word:"Update", phonetic:"/ˈʌpdeɪt/", ms:"Kemaskini", category:"OS", example:"Restart after the system update completes.", exampleMs:"Mulakan semula selepas kemaskini sistem selesai.", speech:"Update" },
+        { word:"Permission", phonetic:"/pərˈmɪʃən/", ms:"Kebenaran / Keistimewaan", category:"OS", example:"You need admin permission to install this.", exampleMs:"Anda memerlukan kebenaran admin untuk memasang ini.", speech:"Permission" },
+        { word:"Process", phonetic:"/ˈprɒsɛs/", ms:"Proses", category:"OS", example:"End the process if it is not responding.", exampleMs:"Tamatkan proses jika ia tidak bertindak balas.", speech:"Process" }
+    ]},
+    { day: 7, topic: "Ayat IT Harian", words: [
+        { word:"Have you tried restarting it?", phonetic:"/hæv juː traɪd riːˈstɑːtɪŋ ɪt/", ms:"Pernahkah awak cuba mulakan semula?", category:"Ayat", example:"Common IT support phrase.", exampleMs:"Ayat sokongan IT yang biasa.", speech:"Have you tried restarting it?" },
+        { word:"Please submit a ticket.", phonetic:"/pliːz səbˈmɪt ə ˈtɪkɪt/", ms:"Sila hantar tiket aduan.", category:"Ayat", example:"Said when a problem needs formal logging.", exampleMs:"Digunakan apabila masalah perlu dilog secara formal.", speech:"Please submit a ticket." },
+        { word:"The system is down.", phonetic:"/ðə ˈsɪstəm ɪz daʊn/", ms:"Sistem tidak berfungsi sekarang.", category:"Ayat", example:"Said when a server or service is unavailable.", exampleMs:"Digunakan apabila pelayan atau perkhidmatan tidak tersedia.", speech:"The system is down." },
+        { word:"Check your internet connection.", phonetic:"/tʃɛk jɔːr ˈɪntənɛt kəˈnɛkʃən/", ms:"Periksa sambungan internet anda.", category:"Ayat", example:"First step in troubleshooting network issues.", exampleMs:"Langkah pertama dalam menyelesaikan masalah rangkaian.", speech:"Check your internet connection." },
+        { word:"Access denied.", phonetic:"/ˈæksɛs dɪˈnaɪd/", ms:"Akses ditolak / tiada kebenaran.", category:"Ayat", example:"You see this when you lack permission.", exampleMs:"Anda akan nampak ini apabila tiada kebenaran.", speech:"Access denied." }
+    ]}
+  ];
 
-// Preload voices
-window.speechSynthesis.onvoiceschanged = () => {};
+  // ========================
+  // FUNGSI GLOBAL (Dipaut ke Window)
+  // ========================
+  window.updateXP = function(add=0) {
+    state.xp = Math.min(state.xp + add, 700);
+    if(add > 0) window.saveState();
+    document.getElementById('xpNum').textContent = state.xp;
+    document.getElementById('xpFill').style.width = (state.xp / 700 * 100) + '%';
+  };
 
-// ========================
-// QUIZ
-// ========================
-function startQuiz() {
-  const words = curriculum[state.currentDay].words;
-  // Shuffle and generate questions
-  const shuffled = [...words].sort(() => Math.random() - 0.5);
-  state.quiz = { questions: shuffled, idx: 0, score: 0, answered: false };
-  renderQuiz();
-}
-
-function renderQuiz() {
-  const { questions, idx } = state.quiz;
-  if (idx >= questions.length) { showResult(); return; }
-  const q = questions[idx];
-  const allWords = curriculum[state.currentDay].words;
-  // Wrong options
-  const wrongs = allWords.filter(w => w.word !== q.word).sort(() => Math.random()-0.5).slice(0,3);
-  const opts = [...wrongs, q].sort(() => Math.random()-0.5);
-  state.quiz.answered = false;
-
-  document.getElementById('quizCard').innerHTML = `
-    <div class="quiz-q">Soalan ${idx+1} / ${questions.length} — Apakah maksud perkataan ini?</div>
-    <div class="quiz-word">${q.word}</div>
-    <div class="quiz-phonetic">${q.phonetic}</div>
-    <button class="quiz-speak-btn" id="qSpeakBtn" onclick="speak('${escQ(q.speech)}', 'qSpeakBtn')">🔊 Dengar Sebutan</button>
-    <div class="options-grid" id="optGrid">
-      ${opts.map(o => `<button class="option-btn" onclick="answerQuiz('${escQ(o.word)}','${escQ(q.word)}',this)">${o.ms}</button>`).join('')}
-    </div>
-    <div class="feedback" id="feedback"></div>
-    <button class="quiz-next-btn" id="qNextBtn" onclick="quizNext()">
-      ${idx+1 < questions.length ? 'Soalan Seterusnya →' : 'Lihat Keputusan 🏆'}
-    </button>
-  `;
-}
-
-function answerQuiz(chosen, correct, btn) {
-  if (state.quiz.answered) return;
-  state.quiz.answered = true;
-  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-  const fb = document.getElementById('feedback');
-  if (chosen === correct) {
-    btn.classList.add('correct');
-    state.quiz.score++;
-    fb.className = 'feedback show ok';
-    fb.textContent = '✅ Betul! Bagus! +10 XP';
-    updateXP(10);
-  } else {
-    btn.classList.add('wrong');
-    // highlight correct
-    document.querySelectorAll('.option-btn').forEach(b => {
-      const msTxt = curriculum[state.currentDay].words.find(w => w.word === correct)?.ms;
-      if (b.textContent.trim() === msTxt) b.classList.add('correct');
+  window.buildHome = function() {
+    const grid = document.getElementById('dayGrid');
+    grid.innerHTML = '';
+    curriculum.forEach((day, i) => {
+      const done = state.completedDays.includes(i);
+      const locked = i > 0 && !state.completedDays.includes(i-1);
+      const btn = document.createElement('div');
+      btn.className = 'day-btn' + (done?' done':'') + (locked?' locked':'');
+      btn.innerHTML = `
+        <div class="day-num">Hari ${day.day}</div>
+        <div class="day-topic">${day.topic}</div>
+        <div class="day-label">${day.words.length} perkataan</div>
+        ${done ? '<div class="tick">✅</div>' : ''}
+        ${locked ? '<div class="tick">🔒</div>' : ''}
+      `;
+      if (!locked && currentUser) btn.onclick = () => window.openDay(i);
+      grid.appendChild(btn);
     });
-    fb.className = 'feedback show bad';
-    fb.textContent = '❌ Tidak tepat. Cuba ingat semula!';
-  }
-  document.getElementById('qNextBtn').classList.add('show');
-}
 
-function quizNext() {
-  state.quiz.idx++;
-  renderQuiz();
-}
+    const btnM2 = document.getElementById('btnMinggu2');
+    if (state.completedDays.includes(6)) { btnM2.style.display = 'block'; } else { btnM2.style.display = 'none'; }
+  };
 
-// ========================
-// RESULT
-// ========================
-function showResult() {
-  const { score, questions } = state.quiz;
-  const pct = Math.round(score / questions.length * 100);
-  const dayIdx = state.currentDay;
-  if (pct >= 60 && !state.completedDays.includes(dayIdx)) {
-    state.completedDays.push(dayIdx);
-    updateXP(50);
-    saveState();
-  }
-  let emoji = pct === 100 ? '🏆' : pct >= 80 ? '🌟' : pct >= 60 ? '😊' : '💪';
-  let msg = pct === 100 ? 'Sempurna! Anda kuasai semua perkataan hari ini!'
-    : pct >= 80 ? 'Hebat! Hampir sempurna. Teruskan!'
-    : pct >= 60 ? 'Lulus! Ulang kaji lagi untuk lebih baik.'
-    : 'Jangan putus asa! Cuba lagi selepas ulang kaji.';
-
-  // Logik butang untuk Hari Terakhir (Ke Minggu 2)
-  let nextActionBtn = `<button class="rbtn primary" onclick="goHome()">🏠 Kembali ke Utama</button>`;
+  window.showScreen = function(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  };
   
-  if (dayIdx === 6 && pct >= 60) {
-    nextActionBtn = `<button class="rbtn primary" onclick="window.location.href='minggu2.html'" style="background:var(--accent2); color:#fff;">🚀 Pergi ke Minggu 2</button>`;
-  }
+  window.goHome = function() { window.showScreen('homeScreen'); window.buildHome(); };
 
-  document.getElementById('resultWrap').innerHTML = `
-    <div class="result-emoji">${emoji}</div>
-    <div class="result-title">${pct >= 60 ? 'Hari Selesai!' : 'Cuba Lagi!'}</div>
-    <div class="result-score">${score}/${questions.length}</div>
-    <div class="result-msg">${msg}</div>
-    <div class="result-btns">
-      <button class="rbtn secondary" onclick="openDay(${dayIdx})">🔁 Cuba Lagi</button>
-      ${nextActionBtn}
-    </div>
-  `;
-  showScreen('resultScreen');
-}
+  window.openDay = function(idx) {
+    state.currentDay = idx; state.currentWord = 0; state.mode = 'learn';
+    window.setMode('learn'); window.showScreen('lessonScreen');
+    window.renderProgress(); window.renderVocab();
+  };
 
-// ========================
-// INIT
-// ========================
-buildHome();
+  window.setMode = function(m) {
+    state.mode = m;
+    document.getElementById('tabLearn').className = 'mode-tab' + (m==='learn'?' active':'');
+    document.getElementById('tabQuiz').className = 'mode-tab' + (m==='quiz'?' active':'');
+    document.getElementById('learnMode').style.display = m==='learn' ? '' : 'none';
+    document.getElementById('quizMode').style.display = m==='quiz' ? '' : 'none';
+    if (m==='quiz') window.startQuiz();
+  };
+
+  window.renderProgress = function() {
+    const words = curriculum[state.currentDay].words;
+    const wrap = document.getElementById('lessonProgress');
+    wrap.innerHTML = '';
+    words.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'prog-dot' + (i < state.currentWord ? ' done' : i === state.currentWord ? ' active' : '');
+      wrap.appendChild(d);
+    });
+  };
+
+  window.escQ = function(s) { return s.replace(/'/g,"&#39;"); };
+
+  window.renderVocab = function() {
+    const day = curriculum[state.currentDay];
+    const w = day.words[state.currentWord];
+    document.getElementById('vocabCard').innerHTML = `
+      <div class="category-tag">${w.category}</div>
+      <div class="word">${w.word}</div>
+      <div class="phonetic">${w.phonetic}</div>
+      <div class="meaning-ms">🇲🇾 ${w.ms}</div>
+      <div class="example">"${w.example}"</div>
+      <div class="example-ms">${w.exampleMs}</div>
+      <button class="speak-btn" id="speakMainBtn" onclick="speak('${window.escQ(w.speech)}', 'speakMainBtn')">
+        🔊 Dengar Sebutan
+      </button>
+    `;
+    window.renderProgress();
+  };
+
+  window.prevWord = function() { if (state.currentWord > 0) { state.currentWord--; window.renderVocab(); } };
+  window.nextWord = function() {
+    const words = curriculum[state.currentDay].words;
+    if (state.currentWord < words.length - 1) { state.currentWord++; window.renderVocab(); } 
+    else { if (confirm('Tahniah! Anda dah belajar semua perkataan hari ini. 🎉\nNak cuba kuiz sekarang?')) { window.setMode('quiz'); } }
+  };
+
+  window.speak = function(text, btnId) {
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(text); utt.lang = 'en-GB'; utt.rate = 0.85; utt.pitch = 1.0;
+    const voices = window.speechSynthesis.getVoices();
+    const preferred = voices.find(v => v.lang.startsWith('en') && v.name.includes('Female')) || voices.find(v => v.lang.startsWith('en')) || voices[0];
+    if (preferred) utt.voice = preferred;
+    if (btnId) { const btn = document.getElementById(btnId); if (btn) { btn.classList.add('speaking'); utt.onend = () => btn.classList.remove('speaking'); } }
+    window.speechSynthesis.speak(utt);
+  };
+  window.speechSynthesis.onvoiceschanged = () => {};
+
+  window.startQuiz = function() {
+    const words = curriculum[state.currentDay].words;
+    const shuffled = [...words].sort(() => Math.random() - 0.5);
+    state.quiz = { questions: shuffled, idx: 0, score: 0, answered: false };
+    window.renderQuiz();
+  };
+
+  window.renderQuiz = function() {
+    const { questions, idx } = state.quiz;
+    if (idx >= questions.length) { window.showResult(); return; }
+    const q = questions[idx]; const allWords = curriculum[state.currentDay].words;
+    const wrongs = allWords.filter(w => w.word !== q.word).sort(() => Math.random()-0.5).slice(0,3);
+    const opts = [...wrongs, q].sort(() => Math.random()-0.5);
+    state.quiz.answered = false;
+
+    document.getElementById('quizCard').innerHTML = `
+      <div class="quiz-q">Soalan ${idx+1} / ${questions.length} — Apakah maksud perkataan ini?</div>
+      <div class="quiz-word">${q.word}</div>
+      <div class="quiz-phonetic">${q.phonetic}</div>
+      <button class="quiz-speak-btn" id="qSpeakBtn" onclick="speak('${window.escQ(q.speech)}', 'qSpeakBtn')">🔊 Dengar Sebutan</button>
+      <div class="options-grid" id="optGrid">
+        ${opts.map(o => `<button class="option-btn" onclick="answerQuiz('${window.escQ(o.word)}','${window.escQ(q.word)}',this)">${o.ms}</button>`).join('')}
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <button class="quiz-next-btn" id="qNextBtn" onclick="quizNext()">
+        ${idx+1 < questions.length ? 'Soalan Seterusnya →' : 'Lihat Keputusan 🏆'}
+      </button>
+    `;
+  };
+
+  window.answerQuiz = function(chosen, correct, btn) {
+    if (state.quiz.answered) return; state.quiz.answered = true;
+    document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+    const fb = document.getElementById('feedback');
+    if (chosen === correct) {
+      btn.classList.add('correct'); state.quiz.score++;
+      fb.className = 'feedback show ok'; fb.textContent = '✅ Betul! Bagus! +10 XP'; window.updateXP(10);
+    } else {
+      btn.classList.add('wrong');
+      document.querySelectorAll('.option-btn').forEach(b => {
+        const msTxt = curriculum[state.currentDay].words.find(w => w.word === correct)?.ms;
+        if (b.textContent.trim() === msTxt) b.classList.add('correct');
+      });
+      fb.className = 'feedback show bad'; fb.textContent = '❌ Tidak tepat. Cuba ingat semula!';
+    }
+    document.getElementById('qNextBtn').classList.add('show');
+  };
+
+  window.quizNext = function() { state.quiz.idx++; window.renderQuiz(); };
+
+  window.showResult = function() {
+    const { score, questions } = state.quiz;
+    const pct = Math.round(score / questions.length * 100);
+    const dayIdx = state.currentDay;
+    
+    if (pct >= 60 && !state.completedDays.includes(dayIdx)) {
+      state.completedDays.push(dayIdx);
+      window.updateXP(50);
+      window.saveState();
+    }
+    
+    let emoji = pct === 100 ? '🏆' : pct >= 80 ? '🌟' : pct >= 60 ? '😊' : '💪';
+    let msg = pct === 100 ? 'Sempurna! Anda kuasai semua perkataan hari ini!' : pct >= 80 ? 'Hebat! Hampir sempurna. Teruskan!' : pct >= 60 ? 'Lulus! Ulang kaji lagi untuk lebih baik.' : 'Jangan putus asa! Cuba lagi selepas ulang kaji.';
+
+    let nextActionBtn = `<button class="rbtn primary" onclick="goHome()">🏠 Kembali ke Utama</button>`;
+    if (dayIdx === 6 && pct >= 60) { nextActionBtn = `<button class="rbtn primary" onclick="window.location.href='minggu2.html'" style="background:var(--accent2); color:#fff;">🚀 Pergi ke Minggu 2</button>`; }
+
+    document.getElementById('resultWrap').innerHTML = `
+      <div class="result-emoji">${emoji}</div>
+      <div class="result-title">${pct >= 60 ? 'Hari Selesai!' : 'Cuba Lagi!'}</div>
+      <div class="result-score">${score}/${questions.length}</div>
+      <div class="result-msg">${msg}</div>
+      <div class="result-btns">
+        <button class="rbtn secondary" onclick="openDay(${dayIdx})">🔁 Cuba Lagi</button>
+        ${nextActionBtn}
+      </div>
+    `;
+    window.showScreen('resultScreen');
+  };
+
+  // INIT AWAL
+  window.buildHome();
+
 </script>
 </body>
 </html>
