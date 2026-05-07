@@ -303,11 +303,13 @@
     </div>
     <div class="big-title">Minggu 2 —<br><span class="hl">Naik Tahap!</span> 💡</div>
     <div class="sub-text">Perkataan lebih kompleks, topik lebih luas. Belajar → Kuiz → Padanan. Setiap hari ada 3 mod!</div>
+    
     <div class="day-grid" id="dayGrid"></div>
+    
     <p style="color:var(--muted);font-size:.75rem;font-family:'IBM Plex Mono',monospace;">
       💡 Selesaikan hari sebelumnya untuk buka hari berikutnya. Skor ≥ 60% untuk lulus.
     </p>
-    <!-- Butang Pergi ke Minggu 3 (Hanya muncul jika Hari 7 selesai) -->
+    
     <button id="btnMinggu3" onclick="window.location.href='minggu3.html'" style="display:none; width:100%; margin-top:20px; padding:15px; background:var(--accent3); color:#000; border:none; border-radius:8px; font-family:'Outfit',sans-serif; font-weight:800; font-size:1.1rem; cursor:pointer; text-align:center;">
       🔥 Buka Minggu 3: Tahap Pro!
     </button>
@@ -494,6 +496,14 @@ function buildHome(){
     if(!locked)el.onclick=()=>openDay(i);
     g.appendChild(el);
   });
+  
+  // Tunjukkan butang "Pergi ke Minggu 3" jika Hari 7 (index ke-6) telah selesai
+  const btnM3 = document.getElementById('btnMinggu3');
+  if (S.done.includes(6)) {
+    btnM3.style.display = 'block';
+  } else {
+    btnM3.style.display = 'none';
+  }
 }
 
 // ============================
@@ -739,13 +749,6 @@ function showResult(from){
 }
 
 // INIT
-  // Tunjukkan butang "Pergi ke Minggu 3" jika Hari 7 (index ke-6) telah selesai
-  const btnM3 = document.getElementById('btnMinggu3');
-  if (S.done.includes(6)) {
-    btnM3.style.display = 'block';
-  } else {
-    btnM3.style.display = 'none';
-  }
 buildHome();
 </script>
 </body>
